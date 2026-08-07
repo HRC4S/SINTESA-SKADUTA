@@ -183,7 +183,7 @@
             <p style="text-align: left; margin-bottom: 0.5rem; font-size: 1rem;">Selamat Datang di</p>
             
             <div class="header-text" style="margin-bottom: 1rem;">
-                <span class="text-sintesa">SINTESA</span> SMKN 2 YOGYAKARTA
+                <span class="text-sintesa">RISET SINTESA</span> SMKN 2 YOGYAKARTA
             </div>
             
             <div style="text-align: center; margin-bottom: 2rem;">
