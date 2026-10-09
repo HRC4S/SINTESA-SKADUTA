@@ -221,8 +221,15 @@
 
 {{-- === 2. WELCOME CARD === --}}
 <div class="welcome-card">
+    
     <h2>Selamat Datang, {{ $siswa->nama_lengkap }}</h2>
     <p>{{ $siswa->jurusan }} | {{ $siswa->rombel }}</p>
+     @if(Auth::guard('siswa')->check() && strtolower(Auth::guard('siswa')->user()->role) === 'koor_kelas')
+        <div style="background:#3279CD; color:#ffff; padding:6px 12px; border-radius:6px; font-size:13px; font-weight:600; display:inline-block; margin-bottom:10px;">
+            <i class="fas fa-user-check"></i>
+            Anda adalah Koordinator Kelas
+        </div>
+    @endif
 </div>
 
 {{-- === 3. GRID DASHBOARD === --}}

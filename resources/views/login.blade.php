@@ -251,6 +251,12 @@
                     @enderror
                 </div>
 
+                <div style="text-align: right; margin-top: 0.75rem;">
+                    <a href="{{ route('password.request') }}" style="color:#1e3a67; font-size: 0.85rem; text-decoration: underline;">
+                        Lupa Password?
+                    </a>
+                </div>
+
                 <div style="display: flex; align-items: center; justify-content: flex-end; margin-top: 1rem;">
                     <button type="submit" class="login-button-custom">
                         Log In

@@ -188,13 +188,15 @@
                     <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="{{ route('admin.datasiswa.index') }}" class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}"><i class="fas fa-users"></i> Data Siswa</a></li>
                     <li><a href="{{ route('admin.kartupelajar.index') }}" class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
-                    <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') ? 'open' : '' }}">
-                        <a href="#" class="dropdown-toggle"><i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i></a>
+                    <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') || request()->is('admin/presensi*') ? 'open' : '' }}">
+                        <a href="#" class="dropdown-toggle"><i class="fas fa-clipboard-check"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i></a>
                         <ul class="dropdown-menu">
+                            <li><a href="{{ route('admin.presensi.dashboard') }}" class="{{ request()->is('admin/presensi*') ? 'active' : '' }}">Presensi</a></li>
                             <li><a href="{{ route('admin.konseling.index') }}">Konseling</a></li>
                             <li><a href="{{ route('admin.keterlambatan.index') }}">Keterlambatan</a></li>
                         </ul>
                     </li>
+                    
                     <li><a href="{{ route('admin.dokumensiswa.index') }}" class="{{ request()->is('admin/dokumensiswa*') ? 'active' : '' }}"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
                     <li><a href="{{ route('admin.prestasi.index') }}" class="{{ request()->is('admin/prestasisiswa*') ? 'active' : '' }}"><i class="fas fa-trophy"></i> Prestasi Siswa</a></li>
                     <li><a href="{{ route('admin.role.index') }}" class="{{ request()->is('admin/role*') ? 'active' : '' }}"><i class="fas fa-user-cog"></i> Manajemen Role</a></li>
@@ -213,7 +215,13 @@
                     <li><a href="{{ route('kesiswaan.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="{{ route('admin.datasiswa.index') }}"><i class="fas fa-users"></i> Data Siswa</a></li>
                     <li><a href="{{ route('admin.kartupelajar.index') }}"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
-                    <li><a href="{{ route('admin.keterlambatan.index') }}"><i class="fas fa-clock"></i> Keterlambatan</a></li>
+                    <li class="dropdown {{ request()->is('admin/keterlambatan*') || request()->is('admin/presensi*') ? 'open' : '' }}">
+                        <a href="#" class="dropdown-toggle"><i class="fas fa-clipboard-check"></i> Kehadiran <i class="fas fa-caret-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ route('admin.presensi.dashboard') }}" class="{{ request()->is('admin/presensi*') ? 'active' : '' }}">Presensi</a></li>
+                            <li><a href="{{ route('admin.keterlambatan.index') }}">Keterlambatan</a></li>
+                        </ul>
+                    </li>
                     <li><a href="{{ route('admin.dokumensiswa.index') }}"><i class="fas fa-file-alt"></i> Dokumen Siswa</a></li>
                     <li><a href="{{ route('admin.prestasi.index') }}"><i class="fas fa-trophy"></i> Prestasi</a></li>
                 @endif

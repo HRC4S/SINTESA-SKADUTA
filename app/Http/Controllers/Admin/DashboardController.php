@@ -33,7 +33,7 @@ class DashboardController extends Controller
       $konselingMenunggu = Konseling::whereIn('status', ['Menunggu', 'pending'])->count();
 
       $keterlambatanBaru = Schema::hasTable('keterlambatans')
-          ? Keterlambatan::where('status', 'pending')->count()
+          ? Keterlambatan::whereIn('status', ['menunggu', 'pending'])->count()
           : 0;
 
       /** ===============================

@@ -189,6 +189,24 @@
     .badge-proses { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
     .badge-sukses { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
     .badge-tolak  { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; } /* Tambahan untuk status ditolak */
+
+    .badge-jenis { padding: 4px 10px; border-radius: 12px; font-size: 10.5px; font-weight: 700; display: inline-block; text-transform: uppercase; letter-spacing: 0.3px; }
+    .badge-jenis-masuk { background: #dbeafe; color: #1e40af; }
+    .badge-jenis-keluar { background: #fde9d0; color: #92400e; }
+
+    .warning-banner {
+        background: linear-gradient(135deg, #fee2e2, #fef2f2);
+        border: 1px solid #fecaca; color: #991b1b;
+        padding: 16px 20px; border-radius: 14px; margin-bottom: 20px;
+        display: flex; align-items: center; gap: 14px;
+    }
+    .warning-banner .icon { font-size: 26px; flex: 0 0 auto; }
+    .warning-banner strong { display: block; font-size: 14px; }
+    .warning-banner span { font-size: 12.5px; opacity: 0.9; }
+
+    .btn-group-ajukan { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-action.outline { background: #fff; color: var(--primary-color); border: 2px solid var(--primary-color); box-shadow: none; }
+    .btn-action.outline:hover { background: #eff6ff; }
     
     /* Tombol Cetak & Lihat Bukti */
     .btn-xs {
@@ -274,6 +292,8 @@
         .form-grid { grid-template-columns: 1fr; gap: 0; }
         .content-header { flex-direction: column; align-items: stretch; }
         .btn-action { justify-content: center; }
+        .btn-group-ajukan { flex-direction: column; width: 100%; }
+        .warning-banner { flex-direction: column; text-align: center; }
         .modal-box { padding: 20px; width: 95%; }
     }
 </style>
@@ -302,6 +322,15 @@
     @endif
     {{-- ========================================================= --}}
 
+    @if ($tampilkanPeringatan)
+        <div class="warning-banner">
+            <div class="icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+            <div>
+                <strong>Perhatian! Kamu sudah terlambat {{ $terlambatBulanIni }}x bulan ini.</strong>
+                <span>Terlalu sering terlambat bisa berpengaruh ke poin pelanggaran. Yuk, coba datang lebih pagi ya.</span>
+            </div>
+        </div>
+    @endif
 
     {{-- === 2. HEADER KARTU (JUDUL BARU) === --}}
     <div class="header-card">
@@ -344,19 +373,25 @@
                 <i class="bi bi-clock-history"></i> Riwayat Pengajuan SIT
             </div>
             
-            <button onclick="openModal()" class="btn-action">
-                <i class="bi bi-plus-circle-fill"></i> Ajukan Izin Baru
-            </button>
+            <div class="btn-group-ajukan">
+                <button onclick="openModal('modalMasuk')" class="btn-action">
+                    <i class="bi bi-door-open-fill"></i> Izin Masuk Kelas
+                </button>
+                <button onclick="openModal('modalKeluar')" class="btn-action outline">
+                    <i class="bi bi-box-arrow-right"></i> Izin Keluar Kelas
+                </button>
+            </div>
         </div>
 
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
-                        <th width="15%">Tanggal</th>
-                        <th width="10%">Jam</th>
-                        <th width="35%">Alasan</th>
-                        <th width="15%">Bukti</th> <th width="25%">Status</th>
+                        <th width="13%">Tanggal</th>
+                        <th width="12%">Jenis</th>
+                        <th width="8%">Jam Ke</th>
+                        <th width="30%">Keterangan</th>
+                        <th width="12%">Bukti</th> <th width="25%">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -365,7 +400,12 @@
                         <td>
                             <div style="font-weight: 600; color: #334155;">{{ Carbon::parse($data->tanggal)->translatedFormat('d M Y') }}</div>
                         </td>
-                        <td>{{ Carbon::parse($data->jam_datang)->format('H:i') }}</td>
+                        <td>
+                            <span class="badge-jenis {{ $data->jenis == 'keluar' ? 'badge-jenis-keluar' : 'badge-jenis-masuk' }}">
+                                {{ $data->jenis == 'keluar' ? 'Keluar' : 'Masuk' }}
+                            </span>
+                        </td>
+                        <td>{{ $data->jam_ke ?: '-' }}</td>
                         <td>{{ Str::limit($data->keterangan, 40) }}</td>
                         
                         {{-- LOGIKA KOLOM BUKTI --}}
@@ -383,9 +423,9 @@
                         <td>
                             {{-- Jika Status DITERIMA --}}
                             @if ($data->status == 'terima' || $data->status == 'Disetujui')
-                                <a href="{{ route('siswa.cetak.sit', $data->id) }}" class="btn-xs btn-print" target="_blank">
-                                    <i class="bi bi-printer-fill"></i> Cetak SIT
-                                </a>
+                                <span class="badge badge-sukses">
+                                    <i class="bi bi-check-circle"></i> Disetujui
+                                </span>
 
                             {{-- Jika Status DITOLAK --}}
                             @elseif ($data->status == 'tolak' || $data->status == 'Ditolak')
@@ -418,7 +458,7 @@
                         </td>
                     @empty
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 40px; color: #94a3b8;">
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #94a3b8;">
                             <i class="bi bi-inbox" style="font-size: 32px; display: block; margin-bottom: 10px;"></i>
                             Belum ada riwayat pengajuan izin.
                         </td>
@@ -431,48 +471,54 @@
 
 </div>
 
-{{-- === MODAL FORM PENGAJUAN === --}}
-<div class="modal-overlay" id="modalIzin">
+{{-- === MODAL IZIN MASUK KELAS === --}}
+<div class="modal-overlay" id="modalMasuk">
     <div class="modal-box">
-        <button class="btn-close" onclick="closeModal()">
+        <button class="btn-close" onclick="closeModal('modalMasuk')">
             <i class="bi bi-x-lg"></i>
         </button>
 
         <div class="modal-header">
-            <h3>Formulir Izin Keterlambatan</h3>
+            <h3>Permohonan Mengikuti Pelajaran (Izin Masuk Kelas)</h3>
         </div>
 
         <form method="POST" action="{{ route('siswa.keterlambatan.ajukan') }}" enctype="multipart/form-data">
             @csrf
-            
-            {{-- Grid 2 Kolom --}}
+            <input type="hidden" name="jenis" value="masuk">
+
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">Nama Siswa</label>
-                    <input type="text" class="form-control" value="{{ $siswa->nama_lengkap }}" readonly 
+                    <input type="text" class="form-control" value="{{ $siswa->nama_lengkap }}" readonly
                            style="background: #e2e8f0; cursor: not-allowed;">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Kelas</label>
-                    <input type="text" class="form-control" value="{{ $siswa->rombel }}" readonly 
+                    <input type="text" class="form-control" value="{{ $siswa->rombel }}" readonly
                            style="background: #e2e8f0; cursor: not-allowed;">
                 </div>
             </div>
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">Tanggal Izin <span style="color:red">*</span></label>
+                    <label class="form-label">Tanggal <span style="color:red">*</span></label>
                     <input type="date" name="tanggal" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Estimasi Waktu Datang <span style="color:red">*</span></label>
-                    <input type="time" name="jam_datang" class="form-control" required>
+                    <label class="form-label">NIS<span style="color:red">*</span></label>
+                    <input type="number" name="no_absen" class="form-control" value="{{ $siswa->nis }}" readonly
+                           style="background: #e2e8f0; cursor: not-allowed;">
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="form-label">Alasan Keterlambatan <span style="color:red">*</span></label>
-                <textarea name="keterangan" class="form-control" rows="3" placeholder="Jelaskan alasan Anda..." required></textarea>
+                <label class="form-label">Mulai Mengikuti Pelajaran Jam Ke <span style="color:red">*</span></label>
+                <input type="number" name="jam_ke" class="form-control" placeholder="Contoh: 3 (s/d selesai)" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Karena <span style="color:red">*</span></label>
+                <textarea name="keterangan" class="form-control" rows="3" placeholder="Jelaskan alasan kamu telat masuk kelas..." required></textarea>
             </div>
 
             <div class="form-group">
@@ -480,9 +526,75 @@
                 <label class="upload-box">
                     <i class="bi bi-cloud-arrow-up" style="font-size: 20px;"></i><br>
                     <span>Klik untuk unggah file (Opsional)</span>
-                    <input type="file" name="dokumen" hidden onchange="previewFile(this)">
+                    <input type="file" name="dokumen" hidden onchange="previewFile(this, 'fileNameMasuk')">
                 </label>
-                <small id="fileName" style="display:block; margin-top:5px; color:#15803d; font-size:12px;"></small>
+                <small id="fileNameMasuk" style="display:block; margin-top:5px; color:#15803d; font-size:12px;"></small>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="bi bi-send-fill"></i> Kirim Pengajuan
+            </button>
+        </form>
+    </div>
+</div>
+
+{{-- === MODAL IZIN KELUAR KELAS === --}}
+<div class="modal-overlay" id="modalKeluar">
+    <div class="modal-box">
+        <button class="btn-close" onclick="closeModal('modalKeluar')">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+        <div class="modal-header">
+            <h3>Permohonan Meninggalkan Pelajaran (Izin Keluar Kelas)</h3>
+        </div>
+
+        <form method="POST" action="{{ route('siswa.keterlambatan.ajukan') }}" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="jenis" value="keluar">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Nama Siswa</label>
+                    <input type="text" class="form-control" value="{{ $siswa->nama_lengkap }}" readonly
+                           style="background: #e2e8f0; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kelas</label>
+                    <input type="text" class="form-control" value="{{ $siswa->rombel }}" readonly
+                           style="background: #e2e8f0; cursor: not-allowed;">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Tanggal <span style="color:red">*</span></label>
+                    <input type="date" name="tanggal" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">No. Absen <span style="color:red">*</span></label>
+                    <input type="number" name="no_absen" class="form-control" placeholder="Contoh: 12" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Jam Ke <span style="color:red">*</span></label>
+                <input type="number" name="jam_ke" class="form-control" placeholder="Contoh: 5" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Kepentingan <span style="color:red">*</span></label>
+                <textarea name="keterangan" class="form-control" rows="3" placeholder="Jelaskan keperluan kamu meninggalkan pelajaran..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Dokumen Pendukung (Foto/Surat)</label>
+                <label class="upload-box">
+                    <i class="bi bi-cloud-arrow-up" style="font-size: 20px;"></i><br>
+                    <span>Klik untuk unggah file (Opsional)</span>
+                    <input type="file" name="dokumen" hidden onchange="previewFile(this, 'fileNameKeluar')">
+                </label>
+                <small id="fileNameKeluar" style="display:block; margin-top:5px; color:#15803d; font-size:12px;"></small>
             </div>
 
             <button type="submit" class="btn-submit">
@@ -510,29 +622,28 @@
     updateClock();
 
     // 2. Modal Logic
-    function openModal() {
-        const modal = document.getElementById('modalIzin');
+    function openModal(id) {
+        const modal = document.getElementById(id);
         modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('show'), 10);
     }
 
-    function closeModal() {
-        const modal = document.getElementById('modalIzin');
+    function closeModal(id) {
+        const modal = document.getElementById(id);
         modal.classList.remove('show');
         setTimeout(() => modal.style.display = 'none', 300);
     }
 
     window.onclick = function(event) {
-        const modal = document.getElementById('modalIzin');
-        if (event.target == modal) {
-            closeModal();
-        }
+        document.querySelectorAll('.modal-overlay').forEach(function (modal) {
+            if (event.target == modal) closeModal(modal.id);
+        });
     }
 
     // 3. File Preview
-    function previewFile(input) {
+    function previewFile(input, targetId) {
         if (input.files && input.files[0]) {
-            document.getElementById('fileName').innerText = 'File terpilih: ' + input.files[0].name;
+            document.getElementById(targetId).innerText = 'File terpilih: ' + input.files[0].name;
         }
     }
 

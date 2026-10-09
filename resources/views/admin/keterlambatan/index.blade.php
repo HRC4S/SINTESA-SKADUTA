@@ -41,6 +41,20 @@
         display: inline-block; white-space: nowrap;
     }
     .btn-tambah:hover { background-color: #123B6B; color: #fff; }
+    .btn-tambah.solid { background-color: #123B6B; color: #fff; }
+    .btn-tambah.solid:hover { background-color: #0f2e52; }
+
+    .jenis-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .jenis-tab {
+        padding: 7px 14px; border-radius: 6px; font-size: 12.5px; font-weight: 600;
+        text-decoration: none; background: #eef1fb; color: #123B6B; transition: 0.2s; white-space: nowrap;
+    }
+    .jenis-tab:hover { background: #dbe1fa; }
+    .jenis-tab.active { background: #123B6B; color: #fff; }
+
+    .badge-jenis { padding: 3px 9px; border-radius: 12px; font-size: 10.5px; font-weight: 700; display: inline-block; text-transform: uppercase; letter-spacing: 0.3px; }
+    .badge-masuk { background: #dbeafe; color: #1e40af; }
+    .badge-keluar { background: #fde9d0; color: #92400e; }
 
     /* TABLE STYLES */
     .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; }
@@ -86,6 +100,7 @@
     /* RESPONSIVE */
     @media (max-width: 768px) {
         .header-keterlambatan { flex-direction: column; text-align: center; gap: 10px; }
+        .jenis-tabs { justify-content: center; }
         .filter-wrapper { flex-direction: column; align-items: stretch; padding: 15px; }
         .filter-form { width: 100%; display: flex; gap: 10px; }
         .filter-form input[type="date"] { flex: 1; }
@@ -98,21 +113,36 @@
 
     {{-- Header --}}
     <div class="header-keterlambatan">
-        <h4>Manajemen Keterlambatan Siswa</h4>
+        <h4>Manajemen Keterlambatan &amp; Izin Kelas</h4>
         <div class="tanggal-jam" id="tanggalJamAdmin"></div>
+    </div>
+
+    {{-- Tab Jenis --}}
+    <div style="background:#fff; padding: 15px 25px 0; border: 1px solid #ddd; border-top: none; border-bottom: none;">
+        <div class="jenis-tabs">
+            <a href="{{ route('admin.keterlambatan.index', ['tanggal' => $tanggal]) }}" class="jenis-tab {{ !$jenis ? 'active' : '' }}">Semua</a>
+            <a href="{{ route('admin.keterlambatan.index', ['tanggal' => $tanggal, 'jenis' => 'masuk']) }}" class="jenis-tab {{ $jenis == 'masuk' ? 'active' : '' }}">Izin Masuk Kelas</a>
+            <a href="{{ route('admin.keterlambatan.index', ['tanggal' => $tanggal, 'jenis' => 'keluar']) }}" class="jenis-tab {{ $jenis == 'keluar' ? 'active' : '' }}">Izin Keluar Kelas</a>
+        </div>
     </div>
 
     {{-- Filter & Tambah --}}
     <div class="filter-wrapper">
         <form method="GET" action="{{ route('admin.keterlambatan.index') }}" class="filter-form">
+            <input type="hidden" name="jenis" value="{{ $jenis }}">
             <i class="fa-solid fa-calendar-days" style="color:#123B6B;"></i>
             <input type="date" name="tanggal" value="{{ $tanggal ?? '' }}">
             <button type="submit">Filter</button>
         </form>
 
-        <a href="{{ route('admin.keterlambatan.create') }}" class="btn-tambah">
-            <i class="fa-solid fa-plus-circle"></i> Tambah Manual
-        </a>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="{{ route('admin.keterlambatan.rekapBulanan') }}" class="btn-tambah solid">
+                <i class="fa-solid fa-calendar-alt"></i> Rekap Bulanan
+            </a>
+            <a href="{{ route('admin.keterlambatan.create') }}" class="btn-tambah">
+                <i class="fa-solid fa-plus-circle"></i> Tambah Manual
+            </a>
+        </div>
     </div>
 
     {{-- Tabel Data --}}
@@ -126,12 +156,14 @@
                 <thead>
                     <tr>
                         <th width="5%">No.</th>
-                        <th width="20%">Nama Siswa</th>
-                        <th width="10%">Jam Datang</th>
-                        <th width="25%">Keterangan</th>
-                        <th width="10%">Bukti</th>
-                        <th width="15%">Status</th>
-                        <th width="15%">Aksi</th>
+                        <th width="14%">Nama Siswa</th>
+                        <th width="10%">NIS</th>
+                        <th width="10%">Jenis</th>
+                        <th width="8%">Jam Ke</th>
+                        <th width="21%">Keterangan</th>
+                        <th width="9%">Bukti</th>
+                        <th width="14%">Status</th>
+                        <th width="17%">Aksi</th>
                     </tr>
                 </thead>
 
@@ -147,9 +179,17 @@
                                 </span>
                             </td>
 
+                            <td>{{ $item->nis }}</td>
+
+                            <td>
+                                <span class="badge-jenis {{ $item->jenis == 'keluar' ? 'badge-keluar' : 'badge-masuk' }}">
+                                    {{ $item->jenis == 'keluar' ? 'Keluar' : 'Masuk' }}
+                                </span>
+                            </td>
+
                             <td>
                                 <span style="font-weight: 600; color: #d35400;">
-                                    {{ \Carbon\Carbon::parse($item->jam_datang)->format('H:i') }}
+                                    {{ $item->jam_ke ?: '-' }}
                                 </span>
                             </td>
 
@@ -168,9 +208,9 @@
 
                             {{-- KOLOM STATUS --}}
                             <td>
-                                @if($item->status == 'terima')
+                                @if(strtolower($item->status) == 'terima')
                                     <span class="badge bg-terima">Diterima</span>
-                                @elseif($item->status == 'tolak')
+                                @elseif(strtolower($item->status) == 'tolak')
                                     <span class="badge bg-tolak">Ditolak</span>
                                 @else
                                     <span class="badge bg-pending">Menunggu</span>
@@ -179,7 +219,7 @@
 
                             {{-- KOLOM AKSI / APPROVAL --}}
                             <td>
-                                @if($item->status == 'Menunggu' || $item->status == 'pending')
+                                @if(strtolower($item->status) == 'menunggu' || strtolower($item->status) == 'pending')
                                     <div class="approval-wrapper">
                                         {{-- Tombol Terima --}}
                                         <form action="{{ route('admin.keterlambatan.updateStatus', $item->id) }}" method="POST">
@@ -199,7 +239,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                @elseif($item->status == 'terima')
+                                @elseif(strtolower($item->status) == 'terima')
                                     {{-- Jika Diterima -> Bisa Cetak --}}
                                     <a href="{{ route('admin.keterlambatan.cetak', $item->id) }}" class="btn-icon btn-print" target="_blank" title="Cetak Surat">
                                         <i class="fa-solid fa-print"></i>
@@ -211,7 +251,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-muted" style="padding: 30px;">
+                            <td colspan="8" class="text-muted" style="padding: 30px;">
                                 <i class="fa-regular fa-folder-open" style="font-size: 24px; margin-bottom: 10px; display:block;"></i>
                                 Tidak ada data pengajuan izin pada tanggal ini.
                             </td>
