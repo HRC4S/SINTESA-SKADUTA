@@ -21,6 +21,7 @@
     .filter-select:focus { border-color: #123B6B; }
     .back-link { color: #123B6B; font-size: 13px; text-decoration: none; font-weight: 600; }
     .back-link:hover { text-decoration: underline; }
+<<<<<<< HEAD
     .student-link { color: #123B6B; font-weight: 600; text-decoration: none; }
     .student-link:hover { text-decoration: underline; }
     .btn-export {
@@ -29,6 +30,8 @@
         transition: 0.2s; white-space: nowrap;
     }
     .btn-export:hover { background-color: #15803d; }
+=======
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 
     .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 20px 25px 25px; }
     table { width: 100%; border-collapse: collapse; min-width: 680px; }
@@ -85,6 +88,7 @@
                 @endforeach
             </select>
         </form>
+<<<<<<< HEAD
         <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
             <a href="{{ route('admin.keterlambatan.rekapBulanan.export', ['rombel' => $rombel, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
                class="btn-export">
@@ -92,13 +96,19 @@
             </a>
             <a href="{{ route('admin.keterlambatan.index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</a>
         </div>
+=======
+        <a href="{{ route('admin.keterlambatan.index') }}" class="back-link"><i class="fas fa-arrow-left"></i> Kembali ke Daftar</a>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
     </div>
 
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
+<<<<<<< HEAD
                     <th>NIS</th>
+=======
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
                     <th>Nama Siswa</th>
                     <th>Kelas</th>
                     <th class="center col-masuk">Izin Masuk (Terlambat)</th>
@@ -115,12 +125,17 @@
                     @endphp
                     @if ($total > 0)
                         <tr class="{{ $peringatan ? 'warn' : '' }}">
+<<<<<<< HEAD
                             <td>{{ $s->nis }}</td>
                             <td>
                                 <a href="{{ route('admin.keterlambatan.rekapBulanan.detail', ['nis' => $s->nis, 'bulan' => $bulan, 'tahun' => $tahun]) }}"
                                    class="student-link" title="Lihat detail pengajuan izin">
                                     {{ $s->nama_lengkap }}
                                 </a>
+=======
+                            <td>
+                                {{ $s->nama_lengkap }}
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
                                 @if ($peringatan)
                                     <span class="warn-badge"><i class="fas fa-triangle-exclamation"></i> {{ $r['masuk'] }}x Terlambat</span>
                                 @endif

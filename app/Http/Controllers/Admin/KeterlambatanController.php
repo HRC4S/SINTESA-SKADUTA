@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+<<<<<<< HEAD
 use App\Exports\KeterlambatanBulananExport;
+=======
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 use Illuminate\Http\Request;
 use App\Models\Keterlambatan;
 use App\Models\Siswa;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+<<<<<<< HEAD
 use Maatwebsite\Excel\Facades\Excel;
+=======
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 
 class KeterlambatanController extends Controller
 {
@@ -162,6 +168,7 @@ class KeterlambatanController extends Controller
 
         return view('admin.keterlambatan.rekap-bulanan', compact('rombelList', 'rombel', 'bulan', 'tahun', 'siswaList', 'rekap'));
     }
+<<<<<<< HEAD
 
     /**
      * Tampilkan rincian pengajuan izin seorang siswa pada periode rekap.
@@ -222,4 +229,6 @@ class KeterlambatanController extends Controller
             $fileName
         );
     }
+=======
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 }

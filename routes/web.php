@@ -151,8 +151,11 @@ Route::prefix('admin')->name('admin.')
     // ⏰ Keterlambatan
     Route::get('/keterlambatan', [KeterlambatanController::class, 'index'])->name('keterlambatan.index');
     Route::get('/keterlambatan/rekap-bulanan', [KeterlambatanController::class, 'rekapBulanan'])->name('keterlambatan.rekapBulanan');
+<<<<<<< HEAD
     Route::get('/keterlambatan/rekap-bulanan/export', [KeterlambatanController::class, 'exportRekapBulanan'])->name('keterlambatan.rekapBulanan.export');
     Route::get('/keterlambatan/rekap-bulanan/{nis}', [KeterlambatanController::class, 'detailRekapBulanan'])->name('keterlambatan.rekapBulanan.detail');
+=======
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
     Route::get('/keterlambatan/create', [KeterlambatanController::class, 'create'])->name('keterlambatan.create');
     Route::post('/keterlambatan/store', [KeterlambatanController::class, 'store'])->name('keterlambatan.store');
     Route::get('/keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSurat'])->name('keterlambatan.cetak');
@@ -407,3 +410,8 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     });
 });
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a

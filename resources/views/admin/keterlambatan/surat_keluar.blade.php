@@ -4,7 +4,11 @@
     <meta charset="utf-8">
     <title>Permohonan Meninggalkan Pelajaran</title>
     <style>
+<<<<<<< HEAD
         @page { size: A6; margin: 12mm 10mm; }
+=======
+        @page { margin: 12mm 10mm; }
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
         body { font-family: 'Times New Roman', Times, serif; font-size: 10.5px; line-height: 1.4; color: #000; }
 
         .kode-form {
@@ -35,11 +39,19 @@
         .tgl-kota { text-align: right; }
         .siswa-block { text-align: right; margin-top: 4px; }
         .ttd-space { height: 34px; }
+<<<<<<< HEAD
         .garis-ttd { border-bottom: 1px dotted #000; width:40%; margin-left: auto; }
 
         .approve-table { width: 50%; margin: 18px 0 0 auto; border-collapse: collapse; }
         .approve-table td { vertical-align: top; width: 50%; text-align: right; padding-top: 6px; }
         .approve-garis { border-bottom: 1px dotted #000; width: 100%; margin: 40px auto 0; }
+=======
+        .garis-ttd { border-bottom: 1px dotted #000; width: 55%; margin-left: auto; }
+
+        .approve-table { width: 100%; margin-top: 18px; border-collapse: collapse; }
+        .approve-table td { vertical-align: top; width: 50%; text-align: center; padding-top: 6px; }
+        .approve-garis { border-bottom: 1px dotted #000; width: 80%; margin: 28px auto 0; }
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 
         .catatan { margin-top: 18px; font-size: 8.5px; }
     </style>
@@ -70,6 +82,10 @@
 
     <div class="header-kop">
         <div class="logo-left"><img src="{{ getBase64ImageSuratKeluar($logoJogjaPath) }}" alt="Logo DIY"></div>
+<<<<<<< HEAD
+=======
+        <div class="logo-right"><img src="{{ getBase64ImageSuratKeluar($logoSmkPath) }}" alt="Logo SMK"></div>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 
         <p class="title-pendukung">
             PEMERINTAH DAERAH DAERAH ISTIMEWA YOGYAKARTA<br>
@@ -99,10 +115,16 @@
     <tr>
         <td class="label-col">Kelas</td>
         <td class="titik-dua">:</td>
+<<<<<<< HEAD
         <td class="isi-col" style="width:45%;">
             {{ $data->rombel ?? ($data->siswa->rombel ?? '-') }}
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <span style="margin-left: 20px;">NIS : {{ $data->nis }}</span>
+=======
+        <td class="isi-col">
+            {{ $data->rombel ?? ($data->siswa->rombel ?? '-') }}
+            <span style="margin-left: 30px;">No. Absen {{ $data->no_absen ?? '-' }}</span>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
         </td>
     </tr>
     <tr>
@@ -115,6 +137,14 @@
         <td class="titik-dua" style="padding-top: 10px;">:</td>
         <td class="isi-col" style="padding-top: 10px;">{{ $data->keterangan }}</td>
     </tr>
+<<<<<<< HEAD
+=======
+    <tr>
+        <td></td>
+        <td class="titik-dua">:</td>
+        <td class="isi-col">&nbsp;</td>
+    </tr>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 </table>
 
 <div class="footer-surat">
@@ -126,6 +156,7 @@
 
 <table class="approve-table">
     <tr>
+<<<<<<< HEAD
         <td>Menyetujui,</td>
     </tr>
     <tr>
@@ -133,6 +164,17 @@
     </tr>
     <tr>
         <td><div class="approve-garis"></div></td>
+=======
+        <td colspan="2">Menyetujui,</td>
+    </tr>
+    <tr>
+        <td>Guru Mata Diklat</td>
+        <td>Guru Piket</td>
+    </tr>
+    <tr>
+        <td><div class="approve-garis"></div></td>
+        <td><div class="approve-garis"></div></td>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
     </tr>
 </table>
 

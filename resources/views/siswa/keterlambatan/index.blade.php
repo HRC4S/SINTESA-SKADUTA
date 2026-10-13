@@ -423,9 +423,15 @@
                         <td>
                             {{-- Jika Status DITERIMA --}}
                             @if ($data->status == 'terima' || $data->status == 'Disetujui')
+<<<<<<< HEAD
                                 <span class="badge badge-sukses">
                                     <i class="bi bi-check-circle"></i> Disetujui
                                 </span>
+=======
+                                <a href="{{ route('siswa.cetak.sit', $data->id) }}" class="btn-xs btn-print" target="_blank">
+                                    <i class="bi bi-printer-fill"></i> Cetak SIT
+                                </a>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 
                             {{-- Jika Status DITOLAK --}}
                             @elseif ($data->status == 'tolak' || $data->status == 'Ditolak')
@@ -505,9 +511,14 @@
                     <input type="date" name="tanggal" class="form-control" required>
                 </div>
                 <div class="form-group">
+<<<<<<< HEAD
                     <label class="form-label">NIS<span style="color:red">*</span></label>
                     <input type="number" name="no_absen" class="form-control" value="{{ $siswa->nis }}" readonly
                            style="background: #e2e8f0; cursor: not-allowed;">
+=======
+                    <label class="form-label">No. Absen <span style="color:red">*</span></label>
+                    <input type="number" name="no_absen" class="form-control" placeholder="Contoh: 12" required>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
                 </div>
             </div>
 

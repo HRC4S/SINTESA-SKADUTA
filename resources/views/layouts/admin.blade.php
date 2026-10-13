@@ -189,7 +189,11 @@
                     <li><a href="{{ route('admin.datasiswa.index') }}" class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}"><i class="fas fa-users"></i> Data Siswa</a></li>
                     <li><a href="{{ route('admin.kartupelajar.index') }}" class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
                     <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') || request()->is('admin/presensi*') ? 'open' : '' }}">
+<<<<<<< HEAD
                         <a href="#" class="dropdown-toggle"><i class="fas fa-clipboard-check"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i></a>
+=======
+                        <a href="#" class="dropdown-toggle"><i class="fas fa-clipboard-check"></i> Kehadiran <i class="fas fa-caret-down"></i></a>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
                         <ul class="dropdown-menu">
                             <li><a href="{{ route('admin.presensi.dashboard') }}" class="{{ request()->is('admin/presensi*') ? 'active' : '' }}">Presensi</a></li>
                             <li><a href="{{ route('admin.konseling.index') }}">Konseling</a></li>

@@ -4,7 +4,11 @@
     <meta charset="utf-8">
     <title>Permohonan Mengikuti Pelajaran</title>
     <style>
+<<<<<<< HEAD
         @page { size: A6; margin: 12mm 10mm; }
+=======
+        @page { margin: 12mm 10mm; }
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
         body { font-family: 'Times New Roman', Times, serif; font-size: 10.5px; line-height: 1.4; color: #000; }
 
         .kode-form {
@@ -106,17 +110,36 @@
         </td>
     </tr>
     <tr>
+<<<<<<< HEAD
         <td class="label-col">pelajaran jam ke</td>
+=======
+        <td class="label-col">Absen</td>
+        <td class="titik-dua">:</td>
+        <td class="isi-col">{{ $data->no_absen ?? '-' }}</td>
+    </tr>
+    <tr>
+        <td class="label-col">Mulai mengikuti pelajaran jam ke</td>
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
         <td class="titik-dua">:</td>
         <td class="isi-col">{{ $data->jam_ke ?? '-' }} &nbsp;&nbsp;&nbsp;&nbsp; s/d selesai</td>
     </tr>
     <tr>
         <td class="label-col" style="vertical-align: top; padding-top: 10px;">Karena</td>
         <td class="titik-dua" style="vertical-align: top; padding-top: 10px;">:</td>
+<<<<<<< HEAD
         <td class="isi-col" style="padding-top: 10px;">{{ $data->keterangan }}</td>
     </tr>
 </table>
 
+=======
+        <td style="padding-top: 10px;">{{ $data->keterangan }}</td>
+    </tr>
+</table>
+
+<div class="garis-alasan"></div>
+<div class="garis-alasan"></div>
+
+>>>>>>> cba39bc31606349d3493376def471ef460785c6a
 <div class="total-terlambat">Total Keterlambatan: {{ $total_terlambat }} kali</div>
 
 <table class="footer-surat">
