@@ -67,7 +67,7 @@
     /* 4. NOTIFICATION GRID - Diperkecil padding & gap */
     .bottom-actions {
         display: grid; 
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         gap: 15px;
     }
     @media (max-width: 1200px) { .bottom-actions { grid-template-columns: repeat(2, 1fr); } }
@@ -99,6 +99,8 @@
     .fancy-prestasi i { color: #d97706 !important; }
     .fancy-dokumen { border-left: 4px solid #ef4444 !important; background: linear-gradient(to right, #fef2f2, #fff) !important; } 
     .fancy-dokumen i { color: #ef4444 !important; }
+    .fancy-presensi { border-left: 4px solid #0d9488 !important; background: linear-gradient(to right, #ccfbf1, #fff) !important; }
+    .fancy-presensi i { color: #0d9488 !important; }
 
     .filter-dropdown { background: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; padding: 2px 6px; font-size: 11px; cursor: pointer; }
 </style>
@@ -200,6 +202,19 @@
                 </span>
             </a>
         </div>
+
+        @if ($bisaTinjauPresensi)
+            <div class="action-card">
+                <h3>List Bukti Presensi</h3>
+                <a href="{{ route('admin.presensi.bukti') }}" class="fancy-notif fancy-presensi">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>
+                        <strong>{{ $jumlahBuktiPresensi }} Bukti</strong>
+                        Menunggu ditinjau
+                    </span>
+                </a>
+            </div>
+        @endif
 
         <div class="action-card">
             <h3>Pengajuan Keterlambatan</h3>

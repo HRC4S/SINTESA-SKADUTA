@@ -11,6 +11,7 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PresensiController extends Controller
@@ -24,6 +25,7 @@ class PresensiController extends Controller
 
         $rombelList = Siswa::select('rombel')
             ->whereNotNull('rombel')
+            ->whereRaw("TRIM(rombel) <> ''")
             ->distinct()
             ->orderBy('rombel')
             ->pluck('rombel');
@@ -55,6 +57,38 @@ class PresensiController extends Controller
         });
 
         return view('admin.presensi.dashboard', compact('data', 'tanggal'));
+    }
+
+    public function buktiBelumDitinjau()
+    {
+        $buktiPresensi = Presensi::with('siswa')
+            ->whereIn('status', Presensi::STATUS_WAJIB_BUKTI)
+            ->whereNotNull('bukti_path')
+            ->where('bukti_path', '<>', '')
+            ->whereNull('bukti_reviewed_at')
+            ->orderByDesc('bukti_uploaded_at')
+            ->orderByDesc('created_at')
+            ->paginate(25);
+
+        return view('admin.presensi.bukti', compact('buktiPresensi'));
+    }
+
+    public function lihatBukti(int $id)
+    {
+        $presensi = Presensi::whereIn('status', Presensi::STATUS_WAJIB_BUKTI)
+            ->whereNotNull('bukti_path')
+            ->where('bukti_path', '<>', '')
+            ->findOrFail($id);
+
+        if (! Storage::disk('public')->exists($presensi->bukti_path)) {
+            abort(404, 'File bukti presensi tidak ditemukan.');
+        }
+
+        if (! $presensi->bukti_reviewed_at) {
+            $presensi->update(['bukti_reviewed_at' => now()]);
+        }
+
+        return response()->noContent();
     }
 
     /**

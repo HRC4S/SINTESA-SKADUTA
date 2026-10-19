@@ -69,6 +69,7 @@ class PresensiSayaController extends Controller
         $presensi->update([
             'bukti_path'        => $path,
             'bukti_uploaded_at' => now(),
+            'bukti_reviewed_at' => null,
         ]);
 
         return back()->with('success', 'Bukti berhasil diunggah.');
