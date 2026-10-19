@@ -101,7 +101,7 @@ class DashboardController extends Controller
 
       if (Schema::hasTable('prestasis')) {
 
-          $filterTahunPrestasi = $request->get('tahun_prestasi');
+          $filterTahunPrestasi = $request->integer('tahun_prestasi');
 
           $kolomTanggal = Schema::hasColumn('prestasis', 'tanggal_prestasi')
               ? 'tanggal_prestasi'
@@ -110,8 +110,10 @@ class DashboardController extends Controller
           $queryPrestasi = DB::table('prestasis')
               ->select('jenis', DB::raw('COUNT(*) as total'));
 
-          if ($filterTahunPrestasi) {
-              $queryPrestasi->whereYear($kolomTanggal, $filterTahunPrestasi);
+          if ($filterTahunPrestasi >= 2000 && $filterTahunPrestasi <= 2100) {
+              $awalTahun = Carbon::create($filterTahunPrestasi, 1, 1)->startOfYear();
+              $akhirTahun = $awalTahun->copy()->endOfYear();
+              $queryPrestasi->whereBetween($kolomTanggal, [$awalTahun->toDateString(), $akhirTahun->toDateString()]);
           }
 
           $dataPrestasi = $queryPrestasi
@@ -129,14 +131,11 @@ class DashboardController extends Controller
           }
 
         $tahunPrestasiList = DB::table('prestasis')
-            ->pluck($kolomTanggal)
-            ->filter()
-            ->map(function ($tanggal) {
-                return \Carbon\Carbon::parse($tanggal)->year;
-            })
-            ->unique()
-            ->sortDesc()
-            ->values();
+            ->whereNotNull($kolomTanggal)
+            ->selectRaw("YEAR($kolomTanggal) as tahun")
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun');
 
       }
 

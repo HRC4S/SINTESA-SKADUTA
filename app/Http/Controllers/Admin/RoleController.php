@@ -33,7 +33,7 @@ class RoleController extends Controller
             });
         }
 
-        $roles = $query->orderBy('nama_lengkap')->get();
+        $roles = $query->orderBy('nama_lengkap')->paginate(25);
         return view('admin.role.index', compact('roles'));
     }
 
@@ -52,7 +52,7 @@ class RoleController extends Controller
         $query->where('role', $role);
     }
 
-    $roles = $query->orderBy('nama')->get();
+    $roles = $query->orderBy('nama')->paginate(25);
     return view('admin.role.index', compact('roles'));
 }
 

@@ -183,7 +183,7 @@
             <tbody>
                 @forelse ($prestasi as $index => $p)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $prestasi->firstItem() + $index }}</td>
                         
                         <td>
                             <strong>{{ $p->siswa->nama_lengkap ?? '-' }}</strong>
@@ -259,6 +259,7 @@
             </tbody>
         </table>
     </div>
+    {{ $prestasi->withQueryString()->links('pagination::simple-tailwind') }}
 
 </div>
 
