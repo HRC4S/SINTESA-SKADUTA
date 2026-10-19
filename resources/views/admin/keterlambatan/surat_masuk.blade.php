@@ -4,18 +4,14 @@
     <meta charset="utf-8">
     <title>Permohonan Mengikuti Pelajaran</title>
     <style>
-<<<<<<< HEAD
         @page { size: A6; margin: 12mm 10mm; }
-=======
-        @page { margin: 12mm 10mm; }
->>>>>>> cba39bc31606349d3493376def471ef460785c6a
         body { font-family: 'Times New Roman', Times, serif; font-size: 10.5px; line-height: 1.4; color: #000; }
 
         .kode-form {
-            position: absolute; top: 0; right: 0; width: 95px;
+            position: absolute; top: -35px; right: -8px; width: 75px; font-size: 9px; font-weight: bold; line-height: 1.2;
             border: 1px solid #000; text-align: center;  
         }
-        .kode-form div { padding: 2px; }
+        .kode-form div { padding: 1px 2px; }
         .kode-form div:first-child { border-bottom: 1px solid #000; }
 
         .total-terlambat {
@@ -26,9 +22,9 @@
         .header-kop .title-pendukung { font-size: 8.5px; line-height: 1.15; }
         .header-kop .title-utama { font-size: 11.5px; font-weight: bold; margin-top: -2px; }
         .logo-left, .logo-right { position: absolute; top: 3px; width: 40px; height: 40px; }
-        .logo-left { left: 25px; } .logo-right { right: 25px; }
-        .header-kop img { width: 100%; height: 100%; object-fit: contain; display: block; }
-        .aksara-jawa-kop img { width: 115px; height: auto; display: block; margin: 3px auto; }
+        .logo-left { left: -8px; } .logo-right { right: -8px; }
+        .header-kop img { width: 100%; height: 100%; object-fit: contain;  display: block; }
+        .aksara-jawa-kop img { width: 150px; height: auto; display: block; margin: 3px auto; margin-top: -10px; }
         .alamat-kop { font-size: 7.5px; line-height: 1.15; margin-top: 3px; }
 
         .judul-surat { text-align: center; font-weight: bold; font-size: 11.5px; text-decoration: underline; margin: 12px 0 16px; text-transform: uppercase; }
@@ -43,7 +39,7 @@
 
         .footer-surat { margin-top: 40px; width: 100%; }
         .footer-surat td { vertical-align: top; width: 50%; text-align: center; }
-        .tgl-kota { text-align: right; margin-bottom: 16px; }
+        .tgl-kota { text-align: right; margin-bottom: 16px; transform: translateY(-10px);}
         .ttd-space { height: 38px; }
         .garis-ttd { border-bottom: 1px dotted #000; width: 80%; margin: 0 auto; }
     </style>
@@ -74,6 +70,7 @@
 
     <div class="header-kop">
         <div class="logo-left"><img src="{{ getBase64ImageSuratMasuk($logoJogjaPath) }}" alt="Logo DIY"></div>
+        <div class="logo-right"><img src="{{ getBase64ImageSuratMasuk($logoSmkPath) }}" alt="Logo SMK"></div>
         <p class="title-pendukung">
             PEMERINTAH DAERAH DAERAH ISTIMEWA YOGYAKARTA<br>
             DINAS PENDIDIKAN, PEMUDA, DAN OLAHRAGA<br>
@@ -110,36 +107,17 @@
         </td>
     </tr>
     <tr>
-<<<<<<< HEAD
         <td class="label-col">pelajaran jam ke</td>
-=======
-        <td class="label-col">Absen</td>
-        <td class="titik-dua">:</td>
-        <td class="isi-col">{{ $data->no_absen ?? '-' }}</td>
-    </tr>
-    <tr>
-        <td class="label-col">Mulai mengikuti pelajaran jam ke</td>
->>>>>>> cba39bc31606349d3493376def471ef460785c6a
         <td class="titik-dua">:</td>
         <td class="isi-col">{{ $data->jam_ke ?? '-' }} &nbsp;&nbsp;&nbsp;&nbsp; s/d selesai</td>
     </tr>
     <tr>
         <td class="label-col" style="vertical-align: top; padding-top: 10px;">Karena</td>
         <td class="titik-dua" style="vertical-align: top; padding-top: 10px;">:</td>
-<<<<<<< HEAD
         <td class="isi-col" style="padding-top: 10px;">{{ $data->keterangan }}</td>
     </tr>
 </table>
 
-=======
-        <td style="padding-top: 10px;">{{ $data->keterangan }}</td>
-    </tr>
-</table>
-
-<div class="garis-alasan"></div>
-<div class="garis-alasan"></div>
-
->>>>>>> cba39bc31606349d3493376def471ef460785c6a
 <div class="total-terlambat">Total Keterlambatan: {{ $total_terlambat }} kali</div>
 
 <table class="footer-surat">
