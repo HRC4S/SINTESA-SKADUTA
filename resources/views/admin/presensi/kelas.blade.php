@@ -54,6 +54,7 @@
     .bukti-cell { flex: 0 0 auto; }
     .link-file { color: #1e3a8a; text-decoration: none; font-weight: 600; font-size: 12px; white-space: nowrap; }
     .link-file:hover { text-decoration: underline; }
+    .bukti-uploaded-at { display: block; margin-top: 4px; color: #64748b; font-size: 11px; }
     .no-bukti { color: #cbd5e1; font-size: 12px; }
 
     .btn-simpan {
@@ -133,6 +134,13 @@
                     <div class="bukti-cell">
                         @if ($rec && $rec->bukti_path)
                             <a href="{{ asset('storage/' . $rec->bukti_path) }}" target="_blank" class="link-file"><i class="fa-solid fa-paperclip"></i> Lihat Bukti</a>
+                            <span class="bukti-uploaded-at">
+                                @if ($rec->bukti_uploaded_at)
+                                    Diunggah {{ $rec->bukti_uploaded_at->locale('id')->translatedFormat('d F Y, H:i') }}
+                                @else
+                                    Tanggal unggah tidak tercatat
+                                @endif
+                            </span>
                         @else
                             <span class="no-bukti">Tidak ada bukti</span>
                         @endif

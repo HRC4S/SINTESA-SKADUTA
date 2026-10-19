@@ -156,12 +156,8 @@
                 <thead>
                     <tr>
                         <th width="5%">No.</th>
-<<<<<<< HEAD
                         <th width="14%">Nama Siswa</th>
                         <th width="10%">NIS</th>
-=======
-                        <th width="16%">Nama Siswa</th>
->>>>>>> cba39bc31606349d3493376def471ef460785c6a
                         <th width="10%">Jenis</th>
                         <th width="8%">Jam Ke</th>
                         <th width="21%">Keterangan</th>
@@ -182,16 +178,9 @@
                                     {{ $item->siswa->rombel ?? '' }}
                                 </span>
                             </td>
-
-<<<<<<< HEAD
                             <td>{{ $item->nis }}</td>
-
-=======
->>>>>>> cba39bc31606349d3493376def471ef460785c6a
                             <td>
                                 <span class="badge-jenis {{ $item->jenis == 'keluar' ? 'badge-keluar' : 'badge-masuk' }}">
-                                    {{ $item->jenis == 'keluar' ? 'Keluar' : 'Masuk' }}
-                                </span>
                             </td>
 
                             <td>
