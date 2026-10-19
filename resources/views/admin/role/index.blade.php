@@ -185,7 +185,7 @@
                         $inisial = strtoupper(substr($namaTampil, 0, 1));
                     @endphp
                     <tr>
-                        <td class="center">{{ $index + 1 }}</td>
+                        <td class="center">{{ $roles->firstItem() + $index }}</td>
                         <td>
                             <div class="user-cell">
                                 <div class="avatar-circle">{{ $inisial }}</div>
@@ -235,6 +235,7 @@
             </tbody>
         </table>
     </div>
+    {{ $roles->withQueryString()->links('pagination::simple-tailwind') }}
 </div>
 
 <script>

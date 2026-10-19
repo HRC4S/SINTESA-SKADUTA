@@ -170,7 +170,7 @@
                 <tbody>
                     @forelse ($keterlambatans as $index => $item)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $keterlambatans->firstItem() + $index }}</td>
 
                             <td class="td-nama">
                                 <strong>{{ $item->siswa->nama_lengkap ?? '-' }}</strong><br>
@@ -181,6 +181,14 @@
                             <td>{{ $item->nis }}</td>
                             <td>
                                 <span class="badge-jenis {{ $item->jenis == 'keluar' ? 'badge-keluar' : 'badge-masuk' }}">
+                                    @if ($item->jenis == 'keluar')
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        Keluar
+                                    @elseg
+                                        <i class="fas fa-sign-in-alt"></i>
+                                        Masuk
+                                    @endif
+                                </span>
                             </td>
 
                             <td>
@@ -256,6 +264,7 @@
                 </tbody>
             </table>
         </div>
+        {{ $keterlambatans->withQueryString()->links('pagination::simple-tailwind') }}
     </div>
 </div>
 

@@ -18,11 +18,13 @@ class DashboardBKController extends Controller
         $konselingSelesai  = Konseling::whereIn('status', ['Disetujui', 'Selesai'])->count();
 
         // ==== 2. STATISTIK KETERLAMBATAN (HARI INI) ====
-        $terlambatHariIni = Keterlambatan::whereDate('created_at', Carbon::today())->count();
+        $awalHariIni = Carbon::today();
+        $akhirHariIni = $awalHariIni->copy()->endOfDay();
+        $terlambatHariIni = Keterlambatan::whereBetween('created_at', [$awalHariIni, $akhirHariIni])->count();
 
         // ==== 3. NOTIFIKASI: KONSELING BARU HARI INI ====
         // Ini untuk alert notifikasi biru di atas
-        $konselingBaru = Konseling::whereDate('created_at', Carbon::today())->count();
+        $konselingBaru = Konseling::whereBetween('created_at', [$awalHariIni, $akhirHariIni])->count();
 
         // ==== 4. RECENT ACTIVITY (DIPISAH) ====
         
@@ -39,13 +41,16 @@ class DashboardBKController extends Controller
             ->get();
 
         // ==== 5. DATA CHART (Statistik Bulanan) ====
+        $jumlahPerBulan = Konseling::query()
+            ->selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
+            ->groupByRaw('MONTH(created_at)')
+            ->pluck('total', 'bulan');
+
         $bulan = [];
         $jumlah = [];
-
-        // Loop 12 Bulan (Januari - Desember)
         for ($i = 1; $i <= 12; $i++) {
-            $bulan[] = Carbon::create()->month($i)->translatedFormat('F'); // Nama Bulan (Indo jika locale diset id)
-            $jumlah[] = Konseling::whereMonth('created_at', $i)->count();
+            $bulan[] = Carbon::create()->month($i)->translatedFormat('F');
+            $jumlah[] = (int) ($jumlahPerBulan[$i] ?? 0);
         }
 
         // ==== 6. RETURN VIEW ====

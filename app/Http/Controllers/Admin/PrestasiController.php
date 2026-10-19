@@ -11,14 +11,14 @@ class PrestasiController extends Controller
 {
     public function index(Request $request)
 {
-    $prestasi = Prestasi::with('siswa');
+    $prestasi = Prestasi::with('siswa')->latest();
 
     // Filter Jenis
     if ($request->jenis) {
         $prestasi->where('jenis', $request->jenis);
     }
 
-    $prestasi = $prestasi->get();
+    $prestasi = $prestasi->paginate(25);
 
     return view('admin.prestasi.index', compact('prestasi'));
 }

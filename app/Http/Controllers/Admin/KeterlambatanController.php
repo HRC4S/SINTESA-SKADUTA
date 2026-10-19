@@ -22,13 +22,13 @@ class KeterlambatanController extends Controller
         $query = Keterlambatan::with('siswa')->orderBy('tanggal', 'desc')->orderBy('created_at', 'desc');
 
         if ($tanggal) {
-            $query->whereDate('tanggal', $tanggal);
+            $query->where('tanggal', $tanggal);
         }
         if ($jenis) {
             $query->where('jenis', $jenis);
         }
 
-        $keterlambatans = $query->get();
+        $keterlambatans = $query->paginate(25);
 
         return view('admin.keterlambatan.index', compact('keterlambatans', 'tanggal', 'jenis'));
     }
@@ -138,9 +138,10 @@ class KeterlambatanController extends Controller
         $bulan = (int) $request->query('bulan', now()->month);
         $tahun = (int) $request->query('tahun', now()->year);
 
+        $awalBulan = Carbon::create($tahun, $bulan, 1)->startOfMonth();
+        $akhirBulan = $awalBulan->copy()->endOfMonth();
         $query = Keterlambatan::where('status', 'terima')
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun);
+            ->whereBetween('tanggal', [$awalBulan->toDateString(), $akhirBulan->toDateString()]);
 
         if ($rombel) {
             $query->where('rombel', $rombel);
@@ -172,10 +173,11 @@ class KeterlambatanController extends Controller
         $tahun = (int) $request->query('tahun', now()->year);
         $siswa = Siswa::where('nis', $nis)->firstOrFail();
 
+        $awalBulan = Carbon::create($tahun, $bulan, 1)->startOfMonth();
+        $akhirBulan = $awalBulan->copy()->endOfMonth();
         $pengajuan = Keterlambatan::where('nis', $nis)
             ->where('status', 'terima')
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun)
+            ->whereBetween('tanggal', [$awalBulan->toDateString(), $akhirBulan->toDateString()])
             ->orderBy('tanggal')
             ->orderBy('jam_datang')
             ->get();
@@ -192,9 +194,10 @@ class KeterlambatanController extends Controller
         $bulan = (int) $request->query('bulan', now()->month);
         $tahun = (int) $request->query('tahun', now()->year);
 
+        $awalBulan = Carbon::create($tahun, $bulan, 1)->startOfMonth();
+        $akhirBulan = $awalBulan->copy()->endOfMonth();
         $query = Keterlambatan::where('status', 'terima')
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun);
+            ->whereBetween('tanggal', [$awalBulan->toDateString(), $akhirBulan->toDateString()]);
 
         if ($rombel) {
             $query->where('rombel', $rombel);

@@ -211,9 +211,10 @@ class PresensiController extends Controller
 
         $siswaSekelas = Siswa::where('rombel', $rombel)->orderBy('nama_lengkap')->get();
 
+        $tanggalAwal = sprintf('%04d-%02d-01', $tahun, $bulan);
+        $tanggalAkhir = sprintf('%04d-%02d-%02d', $tahun, $bulan, $jumlahHari);
         $presensiBulanIni = Presensi::where('rombel', $rombel)
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun)
+            ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
             ->get()
             ->groupBy('nis');
 
