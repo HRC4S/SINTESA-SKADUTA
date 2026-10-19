@@ -525,7 +525,7 @@
                 <label class="form-label">Dokumen Pendukung (Foto/Surat)</label>
                 <label class="upload-box">
                     <i class="bi bi-cloud-arrow-up" style="font-size: 20px;"></i><br>
-                    <span>Klik untuk unggah file (Opsional)</span>
+                    <span>Klik untuk Upload file (Opsional)</span>
                     <input type="file" name="dokumen" hidden onchange="previewFile(this, 'fileNameMasuk')">
                 </label>
                 <small id="fileNameMasuk" style="display:block; margin-top:5px; color:#15803d; font-size:12px;"></small>
@@ -591,7 +591,7 @@
                 <label class="form-label">Dokumen Pendukung (Foto/Surat)</label>
                 <label class="upload-box">
                     <i class="bi bi-cloud-arrow-up" style="font-size: 20px;"></i><br>
-                    <span>Klik untuk unggah file (Opsional)</span>
+                    <span>Klik untuk Upload file (Opsional)</span>
                     <input type="file" name="dokumen" hidden onchange="previewFile(this, 'fileNameKeluar')">
                 </label>
                 <small id="fileNameKeluar" style="display:block; margin-top:5px; color:#15803d; font-size:12px;"></small>

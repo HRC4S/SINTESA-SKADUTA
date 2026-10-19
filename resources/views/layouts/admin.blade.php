@@ -187,7 +187,13 @@
                 @if(auth('guru')->user()->role == 'admin')
                     <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="{{ route('admin.datasiswa.index') }}" class="{{ request()->is('admin/datasiswa*') ? 'active' : '' }}"><i class="fas fa-users"></i> Data Siswa</a></li>
-                    <li><a href="{{ route('admin.kartupelajar.index') }}" class="{{ request()->is('admin/kartupelajar*') ? 'active' : '' }}"><i class="fas fa-id-card"></i> Kartu Pelajar</a></li>
+                     <li class="dropdown {{ request()->is('admin/kartupelajar*') || request()->is('admin.kartupelajar.pengaturan*') ? 'open' : '' }}">
+                        <a href="#" class="dropdown-toggle"><i class="fas fa-id-card"></i> Kartu Pelajar <i class="fas fa-caret-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ route('admin.kartupelajar.index') }}" class="{{ request()->is('admin/kartupelajar') ? 'active' : '' }}">Preview & Cetak Kartu</a></li>
+                            <li><a href="{{ route('admin.kartupelajar.pengaturan') }}" class="{{ request()->is('admin/kartupelajar/pengaturan*') ? 'active' : '' }}">Pengaturan Kartu</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown {{ request()->is('admin/konseling*') || request()->is('admin/keterlambatan*') || request()->is('admin/presensi*') ? 'open' : '' }}">
                         <a href="#" class="dropdown-toggle"><i class="fas fa-clipboard-check"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i></a>
                         <ul class="dropdown-menu">

@@ -171,9 +171,11 @@
                     <p class="kelas-meta kosong">Belum ada data untuk tanggal ini.</p>
                 @endif
 
-                <a href="{{ route('admin.presensi.kelas', ['rombel' => $kelas['rombel'], 'tanggal' => $tanggal]) }}" class="kelas-link">
-                    {{ $kelas['sudah_diinput'] ? 'Lihat / Edit' : 'Input Sekarang' }} <i class="fas fa-arrow-right"></i>
-                </a>
+                @if (filled($kelas['rombel'] ?? null))
+                    <a href="{{ route('admin.presensi.kelas', ['rombel' => trim($kelas['rombel']), 'tanggal' => $tanggal]) }}" class="kelas-link">
+                        {{ $kelas['sudah_diinput'] ? 'Lihat / Edit' : 'Input Sekarang' }} <i class="fas fa-arrow-right"></i>
+                    </a>
+                @endif
             </div>
         @empty
             <div class="empty-state" style="grid-column: 1/-1;">

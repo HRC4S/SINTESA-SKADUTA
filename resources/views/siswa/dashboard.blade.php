@@ -169,6 +169,22 @@
     .bg-ditolak { background: #f8d7da; color: #721c24; }
     .bg-selesai { background: #cff4fc; color: #055160; }
 
+    .presensi-reminder {
+        background: #fff8e1; border: 1px solid #ffe082; border-left: 5px solid #f59e0b;
+        border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; color: #664d03;
+    }
+    .presensi-reminder h3 { margin: 0 0 6px; color: #856404; font-size: 16px; }
+    .presensi-reminder p { margin: 0 0 10px; font-size: 13px; }
+    .presensi-reminder-list { display: grid; gap: 8px; }
+    .presensi-reminder-row {
+        display: flex; justify-content: space-between; align-items: center; gap: 12px;
+        padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,.7);
+    }
+    .presensi-reminder-row a { color: #123B6B; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .presensi-reminder-row a:hover { text-decoration: underline; }
+    .attendance-stat { font-size: 32px; line-height: 1; font-weight: 700; color: #123B6B; }
+    .attendance-stat-note { color: #64748b; font-size: 12px; margin-top: 8px; }
+
     /* === MEDIA QUERIES (OPTIMASI HP) === */
     @media (max-width: 768px) {
         .welcome-card { padding: 20px; text-align: center; }
@@ -183,6 +199,7 @@
         .notif-icon { margin-bottom: 10px; }
 
         .card-content { padding: 15px; }
+        .presensi-reminder-row { align-items: flex-start; flex-direction: column; }
         
         /* Font tabel lebih kecil sedikit di HP */
         .table-dashboard th, .table-dashboard td { padding: 12px 15px; font-size: 13px; }
@@ -231,6 +248,32 @@
         </div>
     @endif
 </div>
+
+@if ($jumlahPresensiBelumUpload > 0)
+    <section class="presensi-reminder">
+        <h3><i class="fas fa-triangle-exclamation"></i> Segera Upload bukti presensi</h3>
+        <p>
+            Ada {{ $jumlahPresensiBelumUpload }} catatan sakit/izin yang belum dilengkapi bukti.
+            Silakan Upload bukti agar dapat diperiksa.
+        </p>
+        <div class="presensi-reminder-list">
+            @foreach ($presensiBelumUpload as $presensi)
+                <div class="presensi-reminder-row">
+                    <span>
+                        {{ $presensi->tanggal->locale('id')->translatedFormat('d F Y') }}
+                        · {{ $presensi->label_status }}
+                    </span>
+                    <a href="{{ route('siswa.presensi.index', ['bulan' => $presensi->tanggal->month, 'tahun' => $presensi->tanggal->year]) }}">
+                        Buka presensi & Upload <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+        @if ($jumlahPresensiBelumUpload > $presensiBelumUpload->count())
+            <p style="margin:10px 0 0;">Menampilkan 5 catatan terbaru dari {{ $jumlahPresensiBelumUpload }} catatan yang belum memiliki bukti.</p>
+        @endif
+    </section>
+@endif
 
 {{-- === 3. GRID DASHBOARD === --}}
 <div class="dashboard-grid">
@@ -285,6 +328,24 @@
             </div>
             <p style="font-weight:700; color:#155724; font-size:16px; margin:0;">Aktif</p>
             <small style="color:#666; margin-top:5px;">T.A. 2025/2026</small>
+        </div>
+    </div>
+
+    {{-- Card 5: Total keterlambatan yang disetujui --}}
+    <div class="card-box">
+        <div class="card-header">Terlambat</div>
+        <div class="card-content">
+            <div class="attendance-stat">{{ $jumlahTerlambat }}</div>
+            <div class="attendance-stat-note">Kali izin masuk yang disetujui</div>
+        </div>
+    </div>
+
+    {{-- Card 6: Total tidak masuk sekolah --}}
+    <div class="card-box">
+        <div class="card-header">Tidak Masuk</div>
+        <div class="card-content">
+            <div class="attendance-stat">{{ $totalTidakMasuk }}</div>
+            <div class="attendance-stat-note">Sakit, izin, dan alpa</div>
         </div>
     </div>
 </div>

@@ -202,7 +202,7 @@
                 <label>Dokumen Pendukung (Opsional)</label>
                 <label class="upload-box">
                     <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; margin-bottom: 8px;"></i><br>
-                    <span>Klik untuk unggah Bukti/Surat</span>
+                    <span>Klik untuk Upload Bukti/Surat</span>
                     <input type="file" name="dokumen" hidden onchange="previewFile(this)">
                 </label>
                 <small id="fileName" style="display:block; margin-top:5px; color:#123B6B; font-weight:600; font-size:12px;"></small>

@@ -129,6 +129,11 @@ Route::prefix('admin')->name('admin.')
 
     // 🪪 Kartu Pelajar
     Route::prefix('kartupelajar')->name('kartupelajar.')->group(function () {
+        Route::middleware('role:admin')->group(function () {
+            Route::get('/pengaturan', [KartuPelajarController::class, 'editPengaturan'])->name('pengaturan');
+            Route::get('/pengaturan/preview', [KartuPelajarController::class, 'previewPengaturan'])->name('pengaturan.preview');
+            Route::put('/pengaturan', [KartuPelajarController::class, 'updatePengaturan'])->name('pengaturan.update');
+        });
         Route::get('/', [KartuPelajarController::class, 'index'])->name('index');
         Route::get('/preview/{nis}', [KartuPelajarController::class, 'preview'])->name('preview');
         Route::post('/print-mass', [KartuPelajarController::class, 'printMass'])->name('printMass');
@@ -209,6 +214,8 @@ Route::prefix('admin/presensi')->name('admin.presensi.')
     ->middleware(['auth:guru', 'role:admin,kesiswaan'])
     ->group(function () {
         Route::get('/', [PresensiController::class, 'dashboard'])->name('dashboard');
+        Route::get('/bukti', [PresensiController::class, 'buktiBelumDitinjau'])->name('bukti');
+        Route::post('/bukti/{id}/lihat', [PresensiController::class, 'lihatBukti'])->name('bukti.lihat');
         Route::get('/kelas/{rombel}', [PresensiController::class, 'kelas'])->name('kelas');
         Route::post('/kelas/{rombel}', [PresensiController::class, 'simpan'])->name('simpan');
         Route::get('/rekap-bulanan', [PresensiController::class, 'rekapBulanan'])->name('rekapBulanan');
@@ -406,4 +413,3 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
         Route::get('/riwayat', [KoorPresensiController::class, 'riwayat'])->name('riwayat');
     });
 });
-

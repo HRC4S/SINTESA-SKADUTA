@@ -136,9 +136,9 @@
                             <a href="{{ asset('storage/' . $rec->bukti_path) }}" target="_blank" class="link-file"><i class="fa-solid fa-paperclip"></i> Lihat Bukti</a>
                             <span class="bukti-uploaded-at">
                                 @if ($rec->bukti_uploaded_at)
-                                    Diunggah {{ $rec->bukti_uploaded_at->locale('id')->translatedFormat('d F Y, H:i') }}
+                                    Diunggah {{ $rec->bukti_uploaded_at->translatedFormat('d F Y, H:i') }}
                                 @else
-                                    Tanggal unggah tidak tercatat
+                                    Tanggal Upload tidak tercatat
                                 @endif
                             </span>
                         @else

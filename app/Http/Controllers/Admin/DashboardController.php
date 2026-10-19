@@ -15,6 +15,7 @@ use App\Models\Guru;
 use App\Models\Siswa;
 use App\Models\Konseling;
 use App\Models\Keterlambatan;
+use App\Models\Presensi;
 use App\Imports\SiswaImport;
 
 class DashboardController extends Controller
@@ -35,6 +36,17 @@ class DashboardController extends Controller
       $keterlambatanBaru = Schema::hasTable('keterlambatans')
           ? Keterlambatan::whereIn('status', ['menunggu', 'pending'])->count()
           : 0;
+
+      $bisaTinjauPresensi = in_array(auth('guru')->user()->role, ['admin', 'kesiswaan'], true);
+      $jumlahBuktiPresensi = 0;
+
+      if ($bisaTinjauPresensi && Schema::hasTable('presensis')) {
+          $buktiPresensi = Presensi::whereIn('status', Presensi::STATUS_WAJIB_BUKTI)
+              ->whereNotNull('bukti_path')
+              ->where('bukti_path', '<>', '')
+              ->whereNull('bukti_reviewed_at');
+          $jumlahBuktiPresensi = $buktiPresensi->count();
+      }
 
       /** ===============================
        * 2. PROGRESS DOKUMEN SISWA
@@ -137,6 +149,8 @@ class DashboardController extends Controller
           'totalKonseling',
           'konselingMenunggu',
           'keterlambatanBaru',
+          'bisaTinjauPresensi',
+          'jumlahBuktiPresensi',
           'sudahUpload',
           'belumUpload',
           'persenBelum',

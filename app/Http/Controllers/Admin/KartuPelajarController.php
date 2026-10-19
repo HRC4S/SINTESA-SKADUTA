@@ -5,12 +5,94 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
+use App\Models\KartuPelajarSetting;
 use Milon\Barcode\Facades\DNS1D;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 
 class KartuPelajarController extends Controller
 {
+    public function editPengaturan(Request $request)
+    {
+        $request->validate([
+            'angkatan' => ['nullable', 'integer', 'between:2000,2099'],
+        ]);
+
+        $angkatan = (int) $request->query('angkatan', now()->year);
+        $pengaturan = KartuPelajarSetting::forAngkatan($angkatan)->initializeForAngkatan();
+        $daftarAngkatan = KartuPelajarSetting::availableAngkatan();
+
+        return view('admin.kartupelajar.pengaturan', compact('pengaturan', 'angkatan', 'daftarAngkatan'));
+    }
+
+    public function previewPengaturan(Request $request)
+    {
+        $validated = $request->validate([
+            'angkatan' => ['required', 'integer', 'between:2000,2099'],
+            'template_style' => ['nullable', 'in:standar,baru'],
+            'bulan' => ['nullable', 'integer', 'between:1,12'],
+            'tahun' => ['nullable', 'integer', 'between:2000,2100'],
+            'nama_kepsek' => ['nullable', 'string', 'max:255'],
+            'nip' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $angkatan = (int) $validated['angkatan'];
+        $nisPrefix = substr((string) ($angkatan % 100 + 100), -2);
+        $siswa = new Siswa([
+            'nis' => $nisPrefix . '0000001',
+            'nisn' => '0000000001',
+            'nama_lengkap' => 'CONTOH NAMA SISWA',
+            'rombel' => 'X',
+            'jurusan' => 'CONTOH JURUSAN',
+            'tempat_lahir' => 'Yogyakarta',
+            'tanggal_lahir' => '2008-01-01',
+            'jenis_kelamin' => 'Laki-laki',
+            'agama' => 'Islam',
+            'nama_ortu' => 'Nama Orang Tua',
+            'alamat' => 'Yogyakarta',
+        ]);
+
+        return view('kartupelajar.template', compact('siswa'));
+    }
+
+    public function updatePengaturan(Request $request)
+    {
+        $validated = $request->validate([
+            'angkatan' => ['required', 'integer', 'between:2000,2099'],
+            'bulan_terbit' => ['required', 'integer', 'between:1,12'],
+            'tahun_terbit' => ['required', 'integer', 'between:2000,2100'],
+            'nama_kepsek' => ['required', 'string', 'max:255'],
+            'nip_kepsek' => ['required', 'string', 'max:50'],
+            'template_style' => ['required', 'in:standar,baru'],
+            'tanda_tangan' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ], [
+            'tanda_tangan.image' => 'File tanda tangan harus berupa gambar.',
+            'tanda_tangan.mimes' => 'Tanda tangan harus berformat JPG atau PNG.',
+            'tanda_tangan.max' => 'Ukuran gambar tanda tangan maksimal 2 MB.',
+        ]);
+
+        $angkatan = (int) $validated['angkatan'];
+        $pengaturan = KartuPelajarSetting::forAngkatan($angkatan);
+        $pathLama = $pengaturan->tanda_tangan_path;
+
+        if ($request->hasFile('tanda_tangan')) {
+            $validated['tanda_tangan_path'] = $request->file('tanda_tangan')
+                ->store('kartu-pelajar', 'public');
+        }
+
+        unset($validated['tanda_tangan']);
+        $pengaturan->update($validated);
+
+        if (isset($validated['tanda_tangan_path']) && $pathLama) {
+            Storage::disk('public')->delete($pathLama);
+        }
+
+        return redirect()
+            ->route('admin.kartupelajar.pengaturan', ['angkatan' => $angkatan])
+            ->with('success', "Pengaturan kartu pelajar angkatan {$angkatan} berhasil disimpan.");
+    }
+
     // 🧭 Daftar siswa
    public function index(Request $request)
 {

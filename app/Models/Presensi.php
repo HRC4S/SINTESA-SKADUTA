@@ -16,12 +16,14 @@ class Presensi extends Model
         'status',
         'bukti_path',
         'bukti_uploaded_at',
+        'bukti_reviewed_at',
         'keterangan',
     ];
 
     protected $casts = [
         'tanggal'            => 'date',
         'bukti_uploaded_at'  => 'datetime',
+        'bukti_reviewed_at'  => 'datetime',
     ];
 
     // Status yang wajib upload bukti kalau tidak hadir
