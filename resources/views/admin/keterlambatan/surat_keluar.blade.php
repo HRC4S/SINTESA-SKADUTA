@@ -20,12 +20,12 @@
 
         .header-kop { text-align: center; border-bottom: 2px solid black; padding-bottom: 4px; margin-bottom: 10px; position: relative; font-family: Arial, sans-serif; color: #000; }
         .header-kop .title-pendukung { font-size: 8.5px; line-height: 1.15; }
-        .header-kop .title-utama { font-size: 11.5px; font-weight: bold; margin-top: -2px; }
+        .header-kop .title-utama { font-size: 11.5px; font-weight: bold; margin-top: -5px; }
         .logo-left, .logo-right { position: absolute; top: 3px; width: 40px; height: 40px; }
         .logo-left { left: -8px; } .logo-right { right: -8px; }
         .header-kop img { width: 100%; height: 100%; object-fit: contain;  display: block; }
-        .aksara-jawa-kop img { width: 150px; height: auto; display: block; margin: 3px auto; margin-top: -10px; }
-        .alamat-kop { font-size: 7.5px; line-height: 1.15; margin-top: 3px; }
+        .aksara-jawa-kop img { width: 150px; height: auto; display: block; margin: 3px auto; margin-top: -15px; }
+        .alamat-kop { font-size: 6px; line-height: 1.15; margin-top: -7px; }
 
         .judul-surat { text-align: center; font-weight: bold; font-size: 11.5px; text-decoration: underline; margin: 12px 0 16px; text-transform: uppercase; }
 

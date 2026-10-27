@@ -184,7 +184,7 @@
                                     @if ($item->jenis == 'keluar')
                                         <i class="fas fa-sign-out-alt"></i>
                                         Keluar
-                                    @elseg
+                                    @else
                                         <i class="fas fa-sign-in-alt"></i>
                                         Masuk
                                     @endif
