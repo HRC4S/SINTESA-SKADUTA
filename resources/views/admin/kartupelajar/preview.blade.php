@@ -4,24 +4,14 @@
 
 @section('content')
 
-{{-- 1. LOAD FONT AWESOME VERSI 6 --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* ====== PERBAIKAN UTAMA DISINI ====== */
-/* Terapkan font Poppins ke container, TAPI JANGAN ke tag <i> (ikon) */
+/* ====== PREVIEW CONTAINER ====== */
 .preview-container {
     font-family: 'Poppins', sans-serif !important;
-}
-
-/* Selector ini memastikan teks biasa kena Poppins, tapi ikon FontAwesome dibiarkan */
-.preview-container *:not(i) { 
-    font-family: 'Poppins', sans-serif !important;
-}
-
-.preview-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,66 +21,32 @@
     width: 100%;
 }
 
-/* ====== PREVIEW FRAME ====== */
+.preview-container *:not(i) { 
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* IFRAME PREVIEW LAYAR MONETOR */
 iframe.preview-frame {
     width: 100%;
-    max-width: 750px;
-    height: 850px;
+    max-width: 450px;
+    height: 290px;
     border: none;
     background: transparent;
     margin-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); 
     border-radius: 8px;
-}
-
-/* ====== AREA CETAK ====== */
-@page {
-    size: A4;
-    margin-top: 0.5cm;
-    margin-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-}
-
-body { background: none !important; }
-
-#printArea { display: none; background: none; }
-
-.print-sheet {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 21cm;
-    height: auto;
-    margin: 0 auto;
-    padding-top: 0.5cm;
-    box-sizing: border-box;
-    background: none;
-}
-
-.print-card {
-    width: 19.5cm;
-    height: 5.4cm;
-    margin-bottom: 1cm;
     overflow: hidden;
-    border: 0.2px solid #ddd;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    page-break-inside: avoid;
-    background: transparent !important;
 }
-
-.print-card iframe {
-    width: 100%; height: 100%; border: none; overflow: hidden; background: transparent !important;
-}
-
-.print-card:nth-of-type(4n) { page-break-after: always; }
 
 /* ====== TOMBOL AKSI ====== */
 .action-buttons {
-    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
-    margin-top: 10px; width: 100%; max-width: 750px;
+    display: flex; 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 10px;
+    margin-top: 10px; 
+    width: 100%; 
+    max-width: 750px;
 }
 
 .btn-custom {
@@ -107,12 +63,11 @@ body { background: none !important; }
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-family: 'Poppins', sans-serif; /* Pastikan teks tombol Poppins */
+    font-family: 'Poppins', sans-serif;
 }
 
-/* Pastikan Ikon FontAwesome (tag i) TIDAK tertimpa font-family */
 .btn-custom i {
-    font-family: "Font Awesome 6 Free" !important; /* Paksa font ikon */
+    font-family: "Font Awesome 6 Free" !important;
     font-weight: 900;
     font-style: normal;
     font-size: 1.1rem;
@@ -124,9 +79,8 @@ body { background: none !important; }
 .btn-batal { background-color: #6c757d; }
 .btn-orange { background-color: #f39c12; }
 
-/* ====== FORM EDIT ====== */
+/* ====== FORM EDIT ATRIBUT ====== */
 #footerFormContainer { width: 100%; display: flex; justify-content: center; }
-
 #footerForm {
     display: inline-block; background: #f0f4ff; padding: 20px;
     border-radius: 8px; text-align: left; width: 100%; max-width: 750px;
@@ -137,33 +91,79 @@ body { background: none !important; }
     display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px; margin-bottom: 20px;
 }
-
 .form-group { display: flex; flex-direction: column; }
 .form-group label { font-size: 0.9rem; font-weight: 600; color: #17375d; margin-bottom: 5px; }
 .form-group input { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
 
-/* ====== MEDIA QUERY MOBILE ====== */
-@media (max-width: 768px) {
-    iframe.preview-frame { height: 600px; }
-    .action-buttons { flex-direction: column; }
-    .btn-custom { width: 100%; margin: 0; }
-    .form-grid { grid-template-columns: 1fr; }
-    .container { padding-left: 10px; padding-right: 10px; }
+/* ====== PENGATURAN CETAK BAHAN INPUT PORTRAIT (53.98mm x 85.6mm) ====== */
+#printArea { display: none; }
+
+@page {
+    size: 53.98mm 85.6mm portrait; /* Bahan masuk secara Portrait */
+    margin: 0;
 }
 
-/* ====== CETAK KHUSUS ====== */
 @media print {
-    html, body { margin: 0; padding: 0; background: none !important; }
-    body * { visibility: hidden !important; background: none !important; }
-    #printArea, #printArea * { visibility: visible !important; background: none !important; }
-    
-    #printArea {
-        display: block !important; position: absolute; left: 0; top: 0.5cm;
-        width: 100%; margin: 0; padding: 0;
+    html, body {
+        width: 53.98mm;
+        height: 85.6mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+        overflow: hidden;
     }
-    iframe { overflow: hidden !important; background: transparent !important; print-color-adjust: exact !important; }
+
+    body * { visibility: hidden !important; }
+
+    #printArea, #printArea * { 
+        visibility: visible !important; 
+    }
+
+    #printArea {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 53.98mm;
+        height: 85.6mm;
+        margin: 0;
+        padding: 0;
+    }
+
+    .print-sheet {
+        width: 53.98mm;
+        height: 85.6mm;
+        margin: 0;
+        padding: 0;
+    }
+
+    .print-card {
+        width: 53.98mm;
+        height: 85.6mm;
+        page-break-after: always;
+        page-break-inside: avoid;
+        margin: 0;
+        padding: 0;
+        border: none !important;
+        position: relative;
+    }
+
+    /* Merotasi Iframe agar hasil cetakLandscape pas pada media Portrait */
+    .print-card iframe {
+        width: 85.6mm !important;
+        height: 53.98mm !important;
+        border: none !important;
+        overflow: hidden !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        transform-origin: center center;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
     .noprint { display: none !important; }
-    @page { margin-top: 0.5cm; background: none; }
 }
 </style>
 
@@ -171,22 +171,22 @@ body { background: none !important; }
 
     <div class="noprint text-center mb-3">
         <p class="text-muted" style="font-size: 0.95rem;">
-            {{ isset($siswas) ? 'Preview kartu pelajar sebelum cetak massal' : 'Preview Kartu Pelajar' }}
+            {{ isset($siswas) ? 'Preview kartu pelajar sebelum cetak massal' : 'Preview Kartu Pelajar (Depan)' }}
         </p>
     </div>
 
     <div class="preview-container noprint">
     
     @if(isset($siswas))
-        {{-- === CETAK MASSAL === --}}
+        {{-- PREVIEW MASSAL --}}
         @foreach($siswas as $siswa)
             <iframe class="preview-frame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
-            <hr style="width:100%; max-width:750px; border:1px dashed #ccc; margin: 20px 0;">
+            <hr style="width:100%; max-width:450px; border:1px dashed #ccc; margin: 15px 0;">
         @endforeach
 
         <div class="action-buttons">
             <button onclick="window.print()" class="btn-custom btn-cetak">
-                <i class="fa-solid fa-print"></i> Cetak Semua
+                <i class="fa-solid fa-print"></i> Cetak Semua Kartu
             </button>
 
             @unless(auth('guru')->user()->role === 'kesiswaan')
@@ -200,90 +200,91 @@ body { background: none !important; }
             </a>
         </div>
 
-   @else
-    {{-- === CETAK SATUAN === --}}
-    <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
+    @else
+        {{-- PREVIEW SATUAN --}}
+        <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
 
-    <div class="action-buttons">
-        
-        <button onclick="document.getElementById('kartuFrame').contentWindow.print()" class="btn-custom btn-cetak">
-            <i class="fa-solid fa-print"></i> Cetak
-        </button>
+        <div class="action-buttons">
+            <button onclick="window.print()" class="btn-custom btn-cetak">
+                <i class="fa-solid fa-print"></i> Cetak Kartu
+            </button>
 
-        @unless(auth('guru')->user()->role === 'kesiswaan')
-            <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="btn-custom btn-orange">
-                <i class="fa-solid fa-user-pen"></i> Edit Siswa
+            @unless(auth('guru')->user()->role === 'kesiswaan')
+                <a href="{{ route('admin.datasiswa.edit', $siswa->nis) }}" class="btn-custom btn-orange">
+                    <i class="fa-solid fa-user-pen"></i> Edit Siswa
+                </a>
+
+                <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">
+                    <i class="fa-solid fa-cog"></i> Edit Data Kartu
+                </button>
+            @endunless
+
+            <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
             </a>
+        </div>
+    @endif
 
-            <button type="button" class="btn-custom btn-edit" onclick="toggleFooterForm()">
-                <i class="fa-solid fa-cog"></i> Edit Data Kartu
-            </button>
-        @endunless
-
-        <a href="{{ route('admin.kartupelajar.index') }}" class="btn-custom btn-batal">
-            <i class="fa-solid fa-arrow-left"></i> Kembali
-        </a>
+    {{-- FORM EDIT DATA KARTU --}}
+    @unless(auth('guru')->user()->role === 'kesiswaan')
+    <div id="footerFormContainer" style="display:none; margin-top:20px;">
+        <form id="footerForm" onsubmit="return updateFrameFooter();">
+            <h4 style="color:#17375d; margin-bottom:15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                <i class="fa-solid fa-pen-to-square"></i> Edit Atribut Kartu
+            </h4>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Bulan:</label>
+                    <input type="text" name="bulan" id="bulan" value="{{ date('F') }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Tahun:</label>
+                    <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Nama Kepala Sekolah:</label>
+                    <input type="text" name="nama_kepsek" id="nama_kepsek" placeholder="Nama Kepsek" required>
+                </div>
+                <div class="form-group">
+                    <label>NIP:</label>
+                    <input type="text" name="nip" id="nip" placeholder="NIP" required>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Gambar Cap & TTD:</label>
+                    <input type="file" id="cap_kepsek" accept="image/*" style="background: #fff;">
+                    <small class="text-muted">Biarkan kosong jika tidak ingin mengubah.</small>
+                </div>
+            </div>
+            <div style="margin-top: 15px; text-align:center; display: flex; gap: 10px; justify-content: center;">
+                <button type="submit" class="btn-custom btn-cetak" style="flex:1;">
+                    <i class="fa-solid fa-save"></i> Simpan
+                </button>
+                <button type="button" class="btn-custom btn-batal" onclick="toggleFooterForm()" style="flex:1;">
+                    Batal
+                </button>
+            </div>
+        </form>
+    </div>
+    @endunless
 
     </div>
-@endif
 
-
-{{-- FORM EDIT DATA KARTU --}}
-@unless(auth('guru')->user()->role === 'kesiswaan')
-<div id="footerFormContainer" style="display:none; margin-top:20px;">
-    <form id="footerForm" onsubmit="return updateFrameFooter();">
-        <h4 style="color:#17375d; margin-bottom:15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-            <i class="fa-solid fa-pen-to-square"></i> Edit Atribut Kartu
-        </h4>
-        <div class="form-grid">
-            <div class="form-group">
-                <label>Bulan:</label>
-                <input type="text" name="bulan" id="bulan" value="{{ date('F') }}" required>
-            </div>
-            <div class="form-group">
-                <label>Tahun:</label>
-                <input type="number" name="tahun" id="tahun" value="{{ date('Y') }}" required>
-            </div>
-            <div class="form-group">
-                <label>Nama Kepala Sekolah:</label>
-                <input type="text" name="nama_kepsek" id="nama_kepsek" placeholder="Nama Kepsek" required>
-            </div>
-            <div class="form-group">
-                <label>NIP:</label>
-                <input type="text" name="nip" id="nip" placeholder="NIP" required>
-            </div>
-            <div class="form-group" style="grid-column: 1 / -1;">
-                <label>Gambar Cap & TTD:</label>
-                <input type="file" id="cap_kepsek" accept="image/*" style="background: #fff;">
-                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah.</small>
-            </div>
+    {{-- AREA CETAK PORTRAIT --}}
+    <div id="printArea">
+        <div class="print-sheet">
+            @if(isset($siswas))
+                @foreach($siswas as $siswa)
+                <div class="print-card">
+                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
+                </div>
+                @endforeach
+            @else
+                <div class="print-card">
+                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
+                </div>
+            @endif
         </div>
-        <div style="margin-top: 15px; text-align:center; display: flex; gap: 10px; justify-content: center;">
-            <button type="submit" class="btn-custom btn-cetak" style="flex:1;">
-                <i class="fa-solid fa-save"></i> Simpan
-            </button>
-            <button type="button" class="btn-custom btn-batal" onclick="toggleFooterForm()" style="flex:1;">
-                Batal
-            </button>
-        </div>
-    </form>
-</div>
-@endunless
-
-</div>
-
-{{-- AREA CETAK --}}
-@if(isset($siswas))
-<div id="printArea">
-    <div class="print-sheet">
-        @foreach($siswas as $siswa)
-        <div class="print-card">
-            <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
-        </div>
-        @endforeach
     </div>
-</div>
-@endif
 
 </div>
 

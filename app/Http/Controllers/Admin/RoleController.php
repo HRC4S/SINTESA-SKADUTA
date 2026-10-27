@@ -17,9 +17,13 @@ class RoleController extends Controller
     $search = $request->search;
     $role = $request->role;
 
-    // Jika role = siswa → ambil dari tabel siswa
-    if ($role === 'Siswa') {
+    // Jika role = siswa (atau koor_kelas) → ambil dari tabel siswa
+    if ($role === 'Siswa' || strtolower((string) $role) === 'koor_kelas') {
         $query = Siswa::query();
+
+        if (strtolower((string) $role) === 'koor_kelas') {
+            $query->where('role', 'koor_kelas');
+        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -29,7 +33,7 @@ class RoleController extends Controller
             });
         }
 
-        $roles = $query->orderBy('nama_lengkap')->get();
+        $roles = $query->orderBy('nama_lengkap')->paginate(25);
         return view('admin.role.index', compact('roles'));
     }
 
@@ -48,7 +52,7 @@ class RoleController extends Controller
         $query->where('role', $role);
     }
 
-    $roles = $query->orderBy('nama')->get();
+    $roles = $query->orderBy('nama')->paginate(25);
     return view('admin.role.index', compact('roles'));
 }
 
@@ -133,9 +137,17 @@ public function edit($identifier)
     $guru = Guru::where('nip', $identifier)->first();
 
     if ($siswa) {
-        // siswa hanya update role
+        // Kalau mau dijadikan koor kelas, pastikan cuma 1 koor aktif per rombel.
+        // Koor lama di kelas yang sama otomatis diturunkan jadi siswa biasa.
+        if (strtolower($request->role) === 'koor_kelas') {
+            Siswa::where('rombel', $siswa->rombel)
+                ->where('role', 'koor_kelas')
+                ->where('nis', '!=', $siswa->nis)
+                ->update(['role' => 'siswa']);
+        }
+
         $siswa->update([
-            'role' => $request->role,
+            'role' => strtolower($request->role) === 'koor_kelas' ? 'koor_kelas' : $request->role,
         ]);
 
     } elseif ($guru) {
@@ -152,6 +164,49 @@ public function edit($identifier)
 
     return redirect()->route('admin.role.index')->with('success', 'Role berhasil diperbarui!');
 }
+
+    /**
+     * 🔹 Assign cepat: jadikan siswa (dicari via NIS) sebagai Koor Kelas.
+     * Dipakai dari form ringkas di halaman Manajemen Role.
+     */
+    public function assignKoorByNis(Request $request)
+    {
+        $request->validate([
+            'nis' => ['required', 'string'],
+        ], [
+            'nis.required' => 'NIS wajib diisi.',
+        ]);
+
+        $siswa = Siswa::where('nis', trim($request->nis))->first();
+
+        if (! $siswa) {
+            return back()->withInput()->with('error', 'Siswa dengan NIS "' . $request->nis . '" tidak ditemukan.');
+        }
+
+        if ($siswa->isKoorKelas()) {
+            return back()->with('error', $siswa->nama_lengkap . ' (NIS ' . $siswa->nis . ') sudah menjadi Koor Kelas ' . $siswa->rombel . '.');
+        }
+
+        // Koor lama di kelas yang sama otomatis diturunkan jadi siswa biasa.
+        $koorLama = Siswa::where('rombel', $siswa->rombel)
+            ->where('role', 'koor_kelas')
+            ->where('nis', '!=', $siswa->nis)
+            ->first();
+
+        Siswa::where('rombel', $siswa->rombel)
+            ->where('role', 'koor_kelas')
+            ->where('nis', '!=', $siswa->nis)
+            ->update(['role' => 'siswa']);
+
+        $siswa->update(['role' => 'koor_kelas']);
+
+        $pesan = $siswa->nama_lengkap . ' (NIS ' . $siswa->nis . ') berhasil dijadikan Koor Kelas ' . $siswa->rombel . '.';
+        if ($koorLama) {
+            $pesan .= ' Koor sebelumnya (' . $koorLama->nama_lengkap . ') otomatis diturunkan jadi siswa biasa.';
+        }
+
+        return redirect()->route('admin.role.index', ['role' => 'koor_kelas'])->with('success', $pesan);
+    }
 
 public function destroy($identifier)
 {

@@ -28,12 +28,15 @@ use App\Http\Controllers\Siswa\OrtuController;
 use App\Http\Controllers\Siswa\DashboardSiswaController;
 use App\Http\Controllers\SiswaImportController;
 use App\Http\Controllers\Siswa\PasswordController;
-use App\Http\Controllers\Siswa\ForgotPasswordController;
 use App\Http\Controllers\Siswa\KeterlambatanSiswaController;
 use App\Http\Controllers\Siswa\DokumenController;
 use App\Http\Controllers\Siswa\KonselingsiswaController;
 use App\Http\Controllers\Siswa\SiswaDataController;
 use App\Http\Controllers\Siswa\SiswaPrestasiController;
+use App\Http\Controllers\Siswa\KoorPresensiController;
+use App\Http\Controllers\Siswa\PresensiSayaController;
+use App\Http\Controllers\Admin\PresensiController;
+use App\Http\Controllers\Auth\ForgotPasswordController as UnifiedForgotPasswordController;
 /*
 |--------------------------------------------------------------------------
 | 🏠 ROUTE ROOT
@@ -77,6 +80,20 @@ Route::middleware('guest')->group(function () {
     })->name('login');
 
     Route::post('/login', [AuthController::class, 'login'])->name('login.process');
+
+    // 🔑 Lupa Password (universal: guru & siswa, dikirim via email)
+    Route::get('/forgot-password', [UnifiedForgotPasswordController::class, 'showLinkRequestForm'])
+        ->name('password.request')
+        ->middleware('throttle:10,1');
+    Route::post('/forgot-password', [UnifiedForgotPasswordController::class, 'sendResetLink'])
+        ->name('password.email')
+        ->middleware('throttle:5,1');
+    Route::get('/reset-password/{token}', [UnifiedForgotPasswordController::class, 'showResetForm'])
+        ->name('password.reset')
+        ->middleware('throttle:10,1');
+    Route::post('/reset-password', [UnifiedForgotPasswordController::class, 'reset'])
+        ->name('password.update')
+        ->middleware('throttle:5,1');
 });
 
 // Logout universal
@@ -112,6 +129,11 @@ Route::prefix('admin')->name('admin.')
 
     // 🪪 Kartu Pelajar
     Route::prefix('kartupelajar')->name('kartupelajar.')->group(function () {
+        Route::middleware('role:admin')->group(function () {
+            Route::get('/pengaturan', [KartuPelajarController::class, 'editPengaturan'])->name('pengaturan');
+            Route::get('/pengaturan/preview', [KartuPelajarController::class, 'previewPengaturan'])->name('pengaturan.preview');
+            Route::put('/pengaturan', [KartuPelajarController::class, 'updatePengaturan'])->name('pengaturan.update');
+        });
         Route::get('/', [KartuPelajarController::class, 'index'])->name('index');
         Route::get('/preview/{nis}', [KartuPelajarController::class, 'preview'])->name('preview');
         Route::post('/print-mass', [KartuPelajarController::class, 'printMass'])->name('printMass');
@@ -133,6 +155,9 @@ Route::prefix('admin')->name('admin.')
 
     // ⏰ Keterlambatan
     Route::get('/keterlambatan', [KeterlambatanController::class, 'index'])->name('keterlambatan.index');
+    Route::get('/keterlambatan/rekap-bulanan', [KeterlambatanController::class, 'rekapBulanan'])->name('keterlambatan.rekapBulanan');
+    Route::get('/keterlambatan/rekap-bulanan/export', [KeterlambatanController::class, 'exportRekapBulanan'])->name('keterlambatan.rekapBulanan.export');
+    Route::get('/keterlambatan/rekap-bulanan/{nis}', [KeterlambatanController::class, 'detailRekapBulanan'])->name('keterlambatan.rekapBulanan.detail');
     Route::get('/keterlambatan/create', [KeterlambatanController::class, 'create'])->name('keterlambatan.create');
     Route::post('/keterlambatan/store', [KeterlambatanController::class, 'store'])->name('keterlambatan.store');
     Route::get('/keterlambatan/cetak/{id}', [KeterlambatanController::class, 'cetakSurat'])->name('keterlambatan.cetak');
@@ -140,6 +165,7 @@ Route::prefix('admin')->name('admin.')
 
     // 📄 Roles
     Route::resource('role', RoleController::class);
+    Route::post('/role-koor-kelas/assign', [RoleController::class, 'assignKoorByNis'])->name('role.assignKoor');
     Route::middleware(['kesiswaan.readonly'])->group(function () {
     
 });
@@ -181,6 +207,25 @@ Route::prefix('prestasi')->name('prestasi.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| 📋 PRESENSI (khusus Admin & Kesiswaan — TIDAK termasuk guru_bk)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin/presensi')->name('admin.presensi.')
+    ->middleware(['auth:guru', 'role:admin,kesiswaan'])
+    ->group(function () {
+        Route::get('/', [PresensiController::class, 'dashboard'])->name('dashboard');
+        Route::get('/bukti', [PresensiController::class, 'buktiBelumDitinjau'])->name('bukti');
+        Route::post('/bukti/{id}/lihat', [PresensiController::class, 'lihatBukti'])->name('bukti.lihat');
+        Route::get('/kelas/{rombel}', [PresensiController::class, 'kelas'])->name('kelas');
+        Route::post('/kelas/{rombel}', [PresensiController::class, 'simpan'])->name('simpan');
+        Route::get('/rekap-bulanan', [PresensiController::class, 'rekapBulanan'])->name('rekapBulanan');
+        Route::get('/rekap-bulanan/export', [PresensiController::class, 'exportRekapBulanan'])->name('rekapBulanan.export');
+        Route::get('/rekap-total', [PresensiController::class, 'rekapTotal'])->name('rekapTotal');
+        Route::get('/rekap-total/export', [PresensiController::class, 'exportRekapTotal'])->name('rekapTotal.export');
+    });
+
+/*
+|--------------------------------------------------------------------------
 | 👨‍🏫 BK AREA (Guru BK)
 |--------------------------------------------------------------------------
 */
@@ -200,7 +245,7 @@ Route::prefix('bk')->name('bk.')
     )->name('konseling.proses');
 
     //Keterlambatan (BK Mengelola Pengajuan Keterlambatan)
-    Route::resource('keterlambatan', Keterlambatancontroller::class);
+    Route::resource('keterlambatan', KeterlambatanController::class);
 
     Route::put('/keterlambatan/{id}/proses',
         [KeterlambatanController::class, 'proses']
@@ -350,16 +395,21 @@ Route::prefix('siswa')->name('siswa.')->middleware(['auth:siswa'])->group(functi
     //Ubah dan Lupa Password Siswa 
     Route::get('/ubah-password', [PasswordController::class, 'edit'])->name('password.edit');
     Route::post('/ubah-password', [PasswordController::class, 'update'])->name('password.update');
-    Route::get('/lupa-password', [ForgotPasswordController::class, 'showForm'])->name('password.form');
-    Route::post('/lupa-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
-
      // 📌 Prestasi Siswa
     Route::get('/prestasi', [SiswaPrestasiController::class, 'index'])->name('prestasi.index');
     Route::post('/prestasi/store', [SiswaPrestasiController::class, 'store'])->name('prestasi.store');
     Route::get('/{id}/edit', [SiswaPrestasiController::class, 'edit'])->name('prestasi.edit');
     Route::put('/{id}', [SiswaPrestasiController::class, 'update'])->name('prestasi.update');
     Route::delete('/{id}', [SiswaPrestasiController::class, 'destroy'])->name('prestasi.destroy');
+
+    // 📋 Presensi — riwayat & upload bukti (semua siswa)
+    Route::get('/presensi', [PresensiSayaController::class, 'index'])->name('presensi.index');
+    Route::post('/presensi/{id}/upload-bukti', [PresensiSayaController::class, 'uploadBukti'])->name('presensi.uploadBukti');
+
+    // 📋 Presensi — khusus Koor Kelas
+    Route::middleware(['role:koor_kelas'])->prefix('presensi-koor')->name('presensi.koor.')->group(function () {
+        Route::get('/', [KoorPresensiController::class, 'create'])->name('create');
+        Route::post('/', [KoorPresensiController::class, 'store'])->name('store');
+        Route::get('/riwayat', [KoorPresensiController::class, 'riwayat'])->name('riwayat');
+    });
 });
-
-
-

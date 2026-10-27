@@ -183,7 +183,7 @@
             <p style="text-align: left; margin-bottom: 0.5rem; font-size: 1rem;">Selamat Datang di</p>
             
             <div class="header-text" style="margin-bottom: 1rem;">
-                <span class="text-sintesa">SINTESA</span> SMKN 2 YOGYAKARTA
+                <span class="text-sintesa">RISET SINTESA</span> SMKN 2 YOGYAKARTA
             </div>
             
             <div style="text-align: center; margin-bottom: 2rem;">
@@ -249,6 +249,12 @@
                     @error('password')
                         <p style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</p>
                     @enderror
+                </div>
+
+                <div style="text-align: right; margin-top: 0.75rem;">
+                    <a href="{{ route('password.request') }}" style="color:#1e3a67; font-size: 0.85rem; text-decoration: underline;">
+                        Lupa Password?
+                    </a>
                 </div>
 
                 <div style="display: flex; align-items: center; justify-content: flex-end; margin-top: 1rem;">
