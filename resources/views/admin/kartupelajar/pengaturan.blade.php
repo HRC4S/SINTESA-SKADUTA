@@ -104,7 +104,7 @@
 
     <section class="card-preview">
         <h3><i class="fas fa-eye"></i> Preview Kartu Angkatan {{ $angkatan }}</h3>
-        <p>Preview berubah otomatis saat desain atau data kepala sekolah diedit. Geser ke samping untuk melihat sisi belakang.</p>
+        <p>Preview berubah otomatis saat desain atau data kepala sekolah diedit, tetapi belum tersimpan. Klik tombol Simpan Angkatan setelah selesai agar perubahan tersimpan dan berlaku di perangkat lain. Geser ke samping untuk melihat sisi belakang.</p>
         <div class="card-preview-frame-wrap">
             <iframe
                 id="cardTemplatePreview"

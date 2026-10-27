@@ -82,7 +82,8 @@ class KartuPelajarController extends Controller
         }
 
         unset($validated['tanda_tangan']);
-        $pengaturan->update($validated);
+        $pengaturan->fill($validated);
+        $pengaturan->save();
 
         if (isset($validated['tanda_tangan_path']) && $pathLama) {
             Storage::disk('public')->delete($pathLama);
