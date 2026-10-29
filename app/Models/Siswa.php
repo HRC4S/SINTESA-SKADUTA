@@ -23,7 +23,7 @@ class Siswa extends Authenticatable
         'nis', 'nisn', 'nama_lengkap', 'email', 'no_whatsapp',
         'rombel', 'jurusan', 'tempat_lahir', 'tanggal_lahir',
         'jenis_kelamin', 'agama', 'nama_ortu', 'alamat', 'foto', 
-        'password','is_default_password',// ✅ penting untuk login siswa
+        'password','is_default_password', 'role', // ✅ penting untuk login siswa
     ];
 
     // Sembunyikan password di output
@@ -79,5 +79,17 @@ class Siswa extends Authenticatable
 {
     return $this->hasMany(\App\Models\Konseling::class, 'nis', 'nis');
 }
+
+    // Relasi Presensi
+    public function presensis()
+    {
+        return $this->hasMany(Presensi::class, 'nis', 'nis');
+    }
+
+    // Apakah siswa ini koor kelas (case-insensitive, karena data lama pakai "Siswa" berbagai casing)
+    public function isKoorKelas(): bool
+    {
+        return strtolower((string) $this->role) === 'koor_kelas';
+    }
 
 }

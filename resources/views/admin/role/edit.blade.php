@@ -176,12 +176,22 @@
                 <div class="form-group">
                     <label for="role">Role Pengguna <span style="color:red">*</span></label>
                     <select name="role" id="role" class="form-control" required>
-                        <option value="admin" {{ $role->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="guru_bk" {{ $role->role == 'guru_bk' ? 'selected' : '' }}>Guru BK</option>
-                        <option value="guru" {{ $role->role == 'guru' ? 'selected' : '' }}>Guru</option>
-                        <option value="kesiswaan" {{ $role->role == 'kesiswaan' ? 'selected' : '' }}>Kesiswaan</option>
-                        <option value="Siswa" {{ $role->role == 'Siswa' ? 'selected' : '' }}>Siswa</option>
+                        @if($role instanceof \App\Models\Siswa)
+                            <option value="siswa" {{ strtolower($role->role) == 'siswa' ? 'selected' : '' }}>Siswa</option>
+                            <option value="koor_kelas" {{ strtolower($role->role) == 'koor_kelas' ? 'selected' : '' }}>Koor Kelas (Presensi)</option>
+                        @else
+                            <option value="admin" {{ $role->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="guru_bk" {{ $role->role == 'guru_bk' ? 'selected' : '' }}>Guru BK</option>
+                            <option value="guru" {{ $role->role == 'guru' ? 'selected' : '' }}>Guru</option>
+                            <option value="kesiswaan" {{ $role->role == 'kesiswaan' ? 'selected' : '' }}>Kesiswaan</option>
+                        @endif
                     </select>
+                    @if($role instanceof \App\Models\Siswa)
+                        <small style="color:#666; font-size:12px; margin-top:5px; display:block;">
+                            Kelas: <strong>{{ $role->rombel }}</strong> — kalau dijadikan Koor Kelas, koor lama di kelas
+                            yang sama otomatis diturunkan jadi siswa biasa (hanya boleh 1 koor aktif per kelas).
+                        </small>
+                    @endif
                 </div>
 
                 {{-- 🔹 Kondisional: Jika User adalah Guru, tampilkan Wali Kelas --}}

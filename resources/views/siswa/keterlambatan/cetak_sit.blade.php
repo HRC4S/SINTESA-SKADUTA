@@ -118,10 +118,6 @@
         {{-- Gunakan Base64 Encoding untuk logo DIY --}}
         <img src="{{ getBase64Image($logoJogjaPath) }}" alt="Logo DIY">
     </div>
-    <div class="logo-right">
-        {{-- Gunakan Base64 Encoding untuk logo SMK --}}
-        <img src="{{ getBase64Image($logoSmkPath) }}" alt="Logo SMK">
-    </div>
     
     <p class="title-pendukung">
         PEMERINTAH DAERAH DAERAH ISTIMEWA YOGYAKARTA<br>

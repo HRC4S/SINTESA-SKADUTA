@@ -15,6 +15,10 @@ class KesiswaanDashboardController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'year_prestasi' => ['nullable', 'integer', 'between:2000,2100'],
+        ]);
+
         Carbon::setLocale('id');
 
         // === 1. CARD INFORMASI UTAMA ===
@@ -44,6 +48,7 @@ class KesiswaanDashboardController extends Controller
         // A. Ambil daftar tahun (Menggunakan created_at atau tanggal_prestasi)
         // Kita gunakan tanggal_prestasi agar sesuai data
         $listTahunPrestasi = Prestasi::selectRaw('YEAR(tanggal_prestasi) as year')
+            ->whereNotNull('tanggal_prestasi')
             ->distinct()
             ->orderBy('year', 'desc')
             ->pluck('year');
@@ -57,8 +62,10 @@ class KesiswaanDashboardController extends Controller
         }
 
         // C. Query data (FIX GROUP BY)
+        $awalTahun = Carbon::create((int) $tahunPilihan, 1, 1)->startOfYear();
+        $akhirTahun = $awalTahun->copy()->endOfYear();
         $prestasiStats = Prestasi::selectRaw('MONTH(tanggal_prestasi) as bulan, COUNT(*) as total')
-            ->whereYear('tanggal_prestasi', $tahunPilihan)
+            ->whereBetween('tanggal_prestasi', [$awalTahun->toDateString(), $akhirTahun->toDateString()])
             ->groupBy(DB::raw('MONTH(tanggal_prestasi)')) // <--- PERBAIKAN PENTING: Group by Raw Function
             ->pluck('total', 'bulan')
             ->toArray();

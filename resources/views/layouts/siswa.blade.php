@@ -168,11 +168,13 @@
        </div>
 
        <div class="profile-admin">
-            <img src="{{ $siswa->foto ? asset('uploads/foto_siswa/' . $siswa->foto) : asset('images/icon pelajar.jpeg') }}" 
+            <img src="{{ Auth::guard('siswa')->user() && Auth::guard('siswa')->user()->foto ? asset('uploads/foto_siswa/' . Auth::guard('siswa')->user()->foto) : asset('images/icon pelajar.jpeg') }}" 
                  alt="Foto Siswa" class="profile-admin-img" />
             <div class="profile-admin-text">
                 <h4 class="profile-admin-name">{{ Auth::guard('siswa')->user()->nama_lengkap ?? 'Siswa' }}</h4>
-                <p class="profile-admin-role">{{ Auth::guard('siswa')->user()->role ?? 'Siswa' }}</p>
+                <p class="profile-admin-role">{{ 
+                ['admin' => 'Administrator', 'koor_kelas' => 'Koordinator Kelas']
+                [Auth::guard('siswa')->user()->role ?? 'Siswa'] ?? 'Siswa' }}</p>
             </div>
        </div>
 
@@ -183,6 +185,13 @@
                         <i class="fas fa-home"></i> Dashboard
                     </a>
                 </li>
+                @if(Auth::guard('siswa')->check() && strtolower(Auth::guard('siswa')->user()->role) === 'koor_kelas')
+                <li>
+                    <a href="{{ route('siswa.presensi.koor.create') }}" class="{{ request()->is('siswa/presensi-koor*') ? 'active' : '' }}">
+                        <i class="fas fa-user-check"></i> Input Presensi Kelas
+                    </a>
+                </li>
+                @endif
                 <li>
                     <a href="{{ route('siswa.datasiswa') }}" class="{{ request()->is('siswa/datasiswa') ? 'active' : '' }}">
                         <i class="fas fa-user-graduate"></i> Data Siswa
@@ -204,6 +213,7 @@
                         <i class="fas fa-comments"></i> Bimbingan Konseling <i class="fas fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a href="{{ route('siswa.presensi.index') }}">Presensi Saya</a></li>
                         <li><a href="{{ route('siswa.konseling.index') }}">Konseling</a></li>
                         <li><a href="{{ route('siswa.keterlambatan.index') }}">Keterlambatan</a></li>
                     </ul>
@@ -239,7 +249,7 @@
             </button>
             <h2>@yield('page_title', 'Dashboard Siswa')</h2>
             <div class="user-profile">
-                <img src="{{ $siswa->foto ? asset('uploads/foto_siswa/' . $siswa->foto) : asset('images/icon pelajar.jpeg') }}" 
+                <img src="{{ Auth::guard('siswa')->user() && Auth::guard('siswa')->user()->foto ? asset('uploads/foto_siswa/' . Auth::guard('siswa')->user()->foto) : asset('images/icon pelajar.jpeg') }}" 
                      alt="Foto Siswa" />
             </div>
         </div>

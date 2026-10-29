@@ -297,9 +297,9 @@
                 </div>
                 <div class="item-details">
                     <h6>{{ Str::limit($late->nama_siswa, 20) }}</h6>
-                    <span>{{ \Carbon\Carbon::parse($late->jam_datang)->format('H:i') }} • {{ \Carbon\Carbon::parse($late->tanggal)->format('d M') }}</span>
+                    <span>Jam ke {{ $late->jam_ke ?: '-' }} • {{ \Carbon\Carbon::parse($late->tanggal)->format('d M') }}</span>
                 </div>
-                <div><span class="status-pill pill-red">{{ $late->menit_terlambat }} mnt</span></div>
+                <div><span class="status-pill pill-red">{{ $late->jenis == 'keluar' ? 'Keluar' : 'Masuk' }}</span></div>
             </a>
         @empty
             <div class="text-center py-4 text-muted" style="font-size:13px;">Belum ada data keterlambatan.</div>

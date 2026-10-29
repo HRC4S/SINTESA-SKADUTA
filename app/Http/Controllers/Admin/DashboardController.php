@@ -15,6 +15,7 @@ use App\Models\Guru;
 use App\Models\Siswa;
 use App\Models\Konseling;
 use App\Models\Keterlambatan;
+use App\Models\Presensi;
 use App\Imports\SiswaImport;
 
 class DashboardController extends Controller
@@ -33,8 +34,19 @@ class DashboardController extends Controller
       $konselingMenunggu = Konseling::whereIn('status', ['Menunggu', 'pending'])->count();
 
       $keterlambatanBaru = Schema::hasTable('keterlambatans')
-          ? Keterlambatan::where('status', 'pending')->count()
+          ? Keterlambatan::whereIn('status', ['menunggu', 'pending'])->count()
           : 0;
+
+      $bisaTinjauPresensi = in_array(auth('guru')->user()->role, ['admin', 'kesiswaan'], true);
+      $jumlahBuktiPresensi = 0;
+
+      if ($bisaTinjauPresensi && Schema::hasTable('presensis')) {
+          $buktiPresensi = Presensi::whereIn('status', Presensi::STATUS_WAJIB_BUKTI)
+              ->whereNotNull('bukti_path')
+              ->where('bukti_path', '<>', '')
+              ->whereNull('bukti_reviewed_at');
+          $jumlahBuktiPresensi = $buktiPresensi->count();
+      }
 
       /** ===============================
        * 2. PROGRESS DOKUMEN SISWA
@@ -89,7 +101,7 @@ class DashboardController extends Controller
 
       if (Schema::hasTable('prestasis')) {
 
-          $filterTahunPrestasi = $request->get('tahun_prestasi');
+          $filterTahunPrestasi = $request->integer('tahun_prestasi');
 
           $kolomTanggal = Schema::hasColumn('prestasis', 'tanggal_prestasi')
               ? 'tanggal_prestasi'
@@ -98,8 +110,10 @@ class DashboardController extends Controller
           $queryPrestasi = DB::table('prestasis')
               ->select('jenis', DB::raw('COUNT(*) as total'));
 
-          if ($filterTahunPrestasi) {
-              $queryPrestasi->whereYear($kolomTanggal, $filterTahunPrestasi);
+          if ($filterTahunPrestasi >= 2000 && $filterTahunPrestasi <= 2100) {
+              $awalTahun = Carbon::create($filterTahunPrestasi, 1, 1)->startOfYear();
+              $akhirTahun = $awalTahun->copy()->endOfYear();
+              $queryPrestasi->whereBetween($kolomTanggal, [$awalTahun->toDateString(), $akhirTahun->toDateString()]);
           }
 
           $dataPrestasi = $queryPrestasi
@@ -117,14 +131,11 @@ class DashboardController extends Controller
           }
 
         $tahunPrestasiList = DB::table('prestasis')
-            ->pluck($kolomTanggal)
-            ->filter()
-            ->map(function ($tanggal) {
-                return \Carbon\Carbon::parse($tanggal)->year;
-            })
-            ->unique()
-            ->sortDesc()
-            ->values();
+            ->whereNotNull($kolomTanggal)
+            ->selectRaw("YEAR($kolomTanggal) as tahun")
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun');
 
       }
 
@@ -137,6 +148,8 @@ class DashboardController extends Controller
           'totalKonseling',
           'konselingMenunggu',
           'keterlambatanBaru',
+          'bisaTinjauPresensi',
+          'jumlahBuktiPresensi',
           'sudahUpload',
           'belumUpload',
           'persenBelum',

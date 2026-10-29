@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Konseling; // ✅ pastikan ini ada
 use App\Models\DokumenSiswa;
 use App\Models\Notifikasi;
+use App\Models\Keterlambatan;
+use App\Models\Presensi;
 
 
 class DashboardSiswaController extends Controller
@@ -28,7 +30,35 @@ class DashboardSiswaController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-        return view('siswa.dashboard', compact('siswa', 'konselings', 'notifikasi'));
+        $presensiWajibBukti = Presensi::where('nis', $siswa->nis)
+            ->whereIn('status', Presensi::STATUS_WAJIB_BUKTI)
+            ->where(function ($query) {
+                $query->whereNull('bukti_path')->orWhere('bukti_path', '');
+            });
+        $jumlahPresensiBelumUpload = (clone $presensiWajibBukti)->count();
+        $presensiBelumUpload = $presensiWajibBukti
+            ->orderByDesc('tanggal')
+            ->take(5)
+            ->get();
+
+        $jumlahTerlambat = Keterlambatan::where('nis', $siswa->nis)
+            ->where('jenis', 'masuk')
+            ->where('status', 'terima')
+            ->count();
+
+        $totalTidakMasuk = Presensi::where('nis', $siswa->nis)
+            ->whereIn('status', ['sakit', 'izin', 'alpa'])
+            ->count();
+
+        return view('siswa.dashboard', compact(
+            'siswa',
+            'konselings',
+            'notifikasi',
+            'presensiBelumUpload',
+            'jumlahPresensiBelumUpload',
+            'jumlahTerlambat',
+            'totalTidakMasuk'
+        ));
     }
 
     public function dataSiswa()
