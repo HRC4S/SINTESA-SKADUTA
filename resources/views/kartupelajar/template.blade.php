@@ -23,8 +23,9 @@
         }
 
         .card, .back {
-            width: 8.6cm;
-            height: 5.4cm;
+            width: 85.6mm;
+            height: 53.98mm;
+            box-sizing: border-box;
             border: 1px solid #000;
             border-left: 0;
             border-right: 0;
@@ -255,7 +256,7 @@
             color: #000;
         }
         .back-modern .blue-line {
-            background-color: #ffff;
+            display: none;
         }
 
         .card-modern {
@@ -409,6 +410,7 @@
 
     $pengaturanKartu = \App\Models\KartuPelajarSetting::forStudent($siswa);
     $templateStyle = request('template_style') ?: $pengaturanKartu->template_style;
+    $printSide = request('side');
 
     // Logic Bulan Footer
     $bulanFooter = request('bulan');
@@ -435,6 +437,7 @@
 @endphp
 
     {{-- 📄 HALAMAN DEPAN --}}
+    @if ($printSide !== 'back')
     <div class="card {{ $templateStyle === 'baru' ? 'card-modern' : '' }}">
         <div class="header">
             <div class="logo-left">
@@ -518,9 +521,13 @@
         <div class="jurusan">{{ strtoupper($siswa->jurusan) }}</div>
 
     </div>
+    @endif
 
     {{-- 📘 HALAMAN BELAKANG --}}
-    <div class="print-page-break"></div>
+    @if ($printSide !== 'front')
+    @if (!$printSide)
+        <div class="print-page-break"></div>
+    @endif
     <div class="back {{ $templateStyle === 'baru' ? 'back-modern' : '' }}">
         <div class="back-header">KETENTUAN</div>
         <div class="rules">
@@ -532,6 +539,7 @@
         </div>
         <div class="blue-line"></div>
     </div>
+    @endif
 
 </body>
 </html>
