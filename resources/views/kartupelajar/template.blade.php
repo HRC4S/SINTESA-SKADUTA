@@ -292,6 +292,7 @@
             height: 3.85cm;
             box-sizing: border-box;
             align-items: flex-start;
+            justify-content: flex-start;
             gap: 3px;
             padding: 5px 6px;
         }
@@ -336,11 +337,17 @@
             padding-top: 1px;
             line-height: 1;
             font-weight: 700;
+            text-align: left;
         }
-        .card-modern .data table { width: 100%; table-layout: fixed; font-size: 7px; }
-        .card-modern .data td { padding: .25px 0; }
+        .card-modern .data table {
+            width: 100%;
+            margin: 0;
+            table-layout: fixed;
+            font-size: 7px;
+        }
+        .card-modern .data td { padding: .25px 0; text-align: left; }
         .card-modern .data td:nth-child(1) { width: 31%; }
-        .card-modern .data td:nth-child(2) { width: 4%; }
+        .card-modern .data td:nth-child(2) { width: 4%; text-align: center; }
         .card-modern .data td:nth-child(3) { width: 65%; }
         .card-modern .data tr:nth-child(2) td:nth-child(3),
         .card-modern .data tr:nth-child(3) td:nth-child(3) {
