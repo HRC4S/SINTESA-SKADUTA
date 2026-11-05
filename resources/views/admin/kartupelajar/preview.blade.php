@@ -275,12 +275,18 @@ iframe.preview-frame {
             @if(isset($siswas))
                 @foreach($siswas as $siswa)
                 <div class="print-card">
-                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
+                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}?side=front" scrolling="no"></iframe>
+                </div>
+                <div class="print-card">
+                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}?side=back" scrolling="no"></iframe>
                 </div>
                 @endforeach
             @else
                 <div class="print-card">
-                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}" scrolling="no"></iframe>
+                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}?side=front" scrolling="no"></iframe>
+                </div>
+                <div class="print-card">
+                    <iframe src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}?side=back" scrolling="no"></iframe>
                 </div>
             @endif
         </div>
