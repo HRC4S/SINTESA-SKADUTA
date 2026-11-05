@@ -26,10 +26,14 @@
             width: 8.6cm;
             height: 5.4cm;
             border: 1px solid #000;
+            border-left: 0;
+            border-right: 0;
             background: white;
             position: relative;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         /* ===== HEADER ===== */
@@ -247,15 +251,17 @@
             color: #000;
         }
         .back-modern .back-header {
-            background-color: #000;
-            color: #fff;
+            background-color: #ffff;
+            color: #000;
         }
         .back-modern .blue-line {
-            background-color: #000;
+            background-color: #ffff;
         }
 
         .card-modern {
             border: 1px solid #64748b;
+            border-left: 0;
+            border-right: 0;
             background: #fff;
         }
 
@@ -367,8 +373,30 @@
 
         @media print {
             body {
-                justify-content: center;
-                align-items: flex-start;
+                display: block;
+                text-align: center;
+            }
+
+            .print-page-break {
+                display: block;
+                height: 0;
+                break-before: page;
+                page-break-before: always;
+            }
+
+            .card,
+            .back {
+                display: block !important;
+                margin: 0 auto 10mm;
+                visibility: visible !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .back {
+                break-before: page;
+                page-break-before: always;
+                margin-top: 0;
             }
         }
     </style>
@@ -492,6 +520,7 @@
     </div>
 
     {{-- 📘 HALAMAN BELAKANG --}}
+    <div class="print-page-break"></div>
     <div class="back {{ $templateStyle === 'baru' ? 'back-modern' : '' }}">
         <div class="back-header">KETENTUAN</div>
         <div class="rules">
