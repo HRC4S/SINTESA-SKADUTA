@@ -242,59 +242,125 @@
             background-color: #2196F3;
         }
 
+        .back-modern {
+            border-color: #000;
+            color: #000;
+        }
+        .back-modern .back-header {
+            background-color: #000;
+            color: #fff;
+        }
+        .back-modern .blue-line {
+            background-color: #000;
+        }
+
         .card-modern {
             border: 1px solid #64748b;
             background: #fff;
         }
 
         .card-modern .header {
-            height: 1.05cm;
-            padding: 6px 42px 3px;
+            height: 1.22cm;
+            padding: 4px 38px 3px;
             box-sizing: border-box;
             color: #111827;
             background: #fff;
             border-bottom: 1px solid #1f2937;
-            font-size: 7px;
-            line-height: 1.15;
+            font-size: 7.2px;
+            line-height: 1.1;
         }
 
         .card-modern .header strong { font-size: 11px; }
         .card-modern .logo-left, .card-modern .logo-right { top: 5px; width: 25px; height: 25px; }
         .card-modern .modern-card-title { font-size: 10px; font-weight: 700; line-height: 1.1; }
-        .card-modern .title, .card-modern .aksara-jawa, .card-modern .school-address { display: none; }
+        .card-modern .title, .card-modern .aksara-jawa { display: none; }
+        .card-modern .school-address {
+            display: block;
+            margin-top: 2px;
+            font-size: 5.2px !important;
+            line-height: 1.05;
+            white-space: nowrap;
+        }
         .card-modern .content {
-            height: 4.05cm;
+            height: 3.85cm;
             box-sizing: border-box;
             align-items: flex-start;
             gap: 3px;
             padding: 5px 6px;
         }
         .card-modern .left-section {
-            width: 2.2cm;
-            padding-left: 15px;
-            flex: 0 0 2.2cm;
-            align-items: flex-start;
+            width: 2.8cm;
+            padding-left: 0;
+            flex: 0 0 2.8cm;
+            align-items: center;
             margin: 0;
         }
-        .card-modern .foto { width: 1.95cm; height: 2.6cm; margin: 0; background: #fff; }
-        .card-modern .barcode { width: 2.8cm; height: .7cm; padding-top: 15px; margin: 2px 0 0; }
-        .card-modern .data { flex: 1; min-width: 0; padding-top: 1px; line-height: 1.12; }
-        .card-modern .data table { width: 100%; table-layout: fixed; font-size: 6.4px; }
-        .card-modern .data td { padding: 1px 0; }
-        .card-modern .data td:nth-child(1) { width: 29%; }
+        .card-modern .foto {
+            width: 1.95cm;
+            height: 2.5cm;
+            flex: 0 0 auto;
+            margin: 0;
+            background: #fff;
+        }
+        .card-modern .foto img,
+        .card-modern .barcode img {
+            display: block;
+        }
+        .card-modern .photo-school-name {
+            width: 2.8cm;
+            margin-top: 3px;
+            color: #111827;
+            font-size: 4px;
+            font-style: bold;
+            font-weight: 700;
+            line-height: 1.05;
+            text-align: center;
+        }
+        .card-modern .barcode {
+            width: 2.8cm;
+            height: .7cm;
+            flex: 0 0 auto;
+            padding: 0;
+            margin: 10px 0 0;
+        }
+        .card-modern .data {
+            flex: 1;
+            min-width: 0;
+            padding-top: 1px;
+            line-height: 1;
+            font-weight: 700;
+        }
+        .card-modern .data table { width: 100%; table-layout: fixed; font-size: 7px; }
+        .card-modern .data td { padding: .25px 0; }
+        .card-modern .data td:nth-child(1) { width: 31%; }
         .card-modern .data td:nth-child(2) { width: 4%; }
-        .card-modern .data td:nth-child(3) { width: 67%; }
+        .card-modern .data td:nth-child(3) { width: 65%; }
+        .card-modern .data tr:nth-child(2) td:nth-child(3),
+        .card-modern .data tr:nth-child(3) td:nth-child(3) {
+            font-size: 7.8px;
+            letter-spacing: .15px;
+        }
+        .card-modern .data tr:last-child td:nth-child(3) {
+            padding-right: 0;
+            white-space: normal;
+            overflow-wrap: normal;
+            word-break: normal;
+        }
         .card-modern .footer {
-            right: -35px;
+            right: 3px;
             bottom: 10px;
-            width: 3.25cm;
+            width: 2.5cm;
+            padding: 1px;
+            background: #fff;
+            z-index: 3;
             font-size: 5.5px;
             line-height: 1.15;
         }
-        .card-modern .footer strong:first-of-type { margin-top: -8px !important; text-align: left; }
-        .card-modern .ttd-single { margin: -8px -15px -12px; text-align: left; }
+        .card-modern .footer strong:first-of-type { margin-top: -7px !important; text-align: left; }
+        .card-modern .ttd-single { margin: -15px 0 -15px; text-align: center; }
         .card-modern .ttd-single .ttd-cap {
-            width: 48px;
+            width: 60px;
+            margin-left : -60px;
             transform: none;
         }
         .card-modern .jurusan { display: none; }
@@ -380,6 +446,9 @@
                         <span style="font-size:7px; display:block; padding-top:1cm;">Foto Siswa</span>
                     @endif
                 </div>
+                @if ($templateStyle === 'baru')
+                    <div class="photo-school-name">SMK 2 NEGERI YOGYAKARTA</div>
+                @endif
                 <div class="barcode">
                     {{-- Pastikan width parameter (1.5 atau 2) sesuai kebutuhan scanner --}}
                     <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($siswa->nis, 'C39', 1, 45) }}" alt="Barcode">
@@ -423,7 +492,7 @@
     </div>
 
     {{-- 📘 HALAMAN BELAKANG --}}
-    <div class="back">
+    <div class="back {{ $templateStyle === 'baru' ? 'back-modern' : '' }}">
         <div class="back-header">KETENTUAN</div>
         <div class="rules">
             <li>Kartu ini berlaku selama pemiliknya masih berstatus sebagai siswa SMK Negeri 2 Yogyakarta.</li>
