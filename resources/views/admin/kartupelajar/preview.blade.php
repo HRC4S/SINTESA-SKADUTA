@@ -95,18 +95,18 @@ iframe.preview-frame {
 .form-group label { font-size: 0.9rem; font-weight: 600; color: #17375d; margin-bottom: 5px; }
 .form-group input { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
 
-/* ====== PENGATURAN CETAK BAHAN INPUT PORTRAIT (53.98mm x 85.6mm) ====== */
+/* ====== PENGATURAN CETAK CREDIT CARD (85.6mm x 53.98mm) ====== */
 #printArea { display: none; }
 
 @page {
-    size: 53.98mm 85.6mm portrait; /* Bahan masuk secara Portrait */
+    size: 85.6mm 53.98mm landscape;
     margin: 0;
 }
 
 @media print {
     html, body {
-        width: 53.98mm;
-        height: 85.6mm;
+        width: 85.6mm;
+        height: 53.98mm;
         margin: 0 !important;
         padding: 0 !important;
         background: none !important;
@@ -124,22 +124,22 @@ iframe.preview-frame {
         position: absolute;
         left: 0;
         top: 0;
-        width: 53.98mm;
-        height: 85.6mm;
+        width: 85.6mm;
+        height: 53.98mm;
         margin: 0;
         padding: 0;
     }
 
     .print-sheet {
-        width: 53.98mm;
-        height: 85.6mm;
+        width: 85.6mm;
+        height: 53.98mm;
         margin: 0;
         padding: 0;
     }
 
     .print-card {
-        width: 53.98mm;
-        height: 85.6mm;
+        width: 85.6mm;
+        height: 53.98mm;
         page-break-after: always;
         page-break-inside: avoid;
         margin: 0;
@@ -148,17 +148,14 @@ iframe.preview-frame {
         position: relative;
     }
 
-    /* Merotasi Iframe agar hasil cetakLandscape pas pada media Portrait */
     .print-card iframe {
         width: 85.6mm !important;
         height: 53.98mm !important;
         border: none !important;
         overflow: hidden !important;
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-90deg);
-        transform-origin: center center;
+        top: 0;
+        left: 0;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
@@ -205,7 +202,7 @@ iframe.preview-frame {
         <iframe class="preview-frame" id="kartuFrame" src="{{ route('admin.kartupelajar.frame', $siswa->nis) }}"></iframe>
 
         <div class="action-buttons">
-            <button onclick="window.print()" class="btn-custom btn-cetak">
+            <button onclick="printKartuFrame()" class="btn-custom btn-cetak">
                 <i class="fa-solid fa-print"></i> Cetak Kartu
             </button>
 
@@ -299,6 +296,16 @@ function toggleFooterForm() {
     const form = document.getElementById('footerFormContainer');
     form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'flex' : 'none';
     if(form.style.display === 'flex') { form.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+}
+
+function printKartuFrame() {
+    const frame = document.getElementById('kartuFrame');
+    if (!frame || !frame.contentWindow) {
+        return;
+    }
+
+    frame.contentWindow.focus();
+    frame.contentWindow.print();
 }
 
 function updateFrameFooter() {
