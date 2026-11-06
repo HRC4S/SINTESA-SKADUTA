@@ -278,7 +278,7 @@
         }
 
         .card-modern .header strong { font-size: 11px; }
-        .card-modern .logo-left, .card-modern .logo-right { top: 5px; width: 25px; height: 25px; }
+        .card-modern .logo-left, .card-modern .logo-right { top: 5px; width: 35px; height: 35px; }
         .card-modern .modern-card-title { font-size: 10px; font-weight: 700; line-height: 1.1; }
         .card-modern .title, .card-modern .aksara-jawa { display: none; }
         .card-modern .school-address {
@@ -382,7 +382,7 @@
         @media print {
             body {
                 display: block;
-                text-align: center;
+                text-align: left;
             }
 
             .print-page-break {
@@ -395,7 +395,7 @@
             .card,
             .back {
                 display: block !important;
-                margin: 0 auto 10mm;
+                margin: 0;
                 visibility: visible !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -404,7 +404,6 @@
             .back {
                 break-before: page;
                 page-break-before: always;
-                margin-top: 0;
             }
         }
     </style>

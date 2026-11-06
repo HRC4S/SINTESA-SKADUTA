@@ -95,22 +95,21 @@ iframe.preview-frame {
 .form-group label { font-size: 0.9rem; font-weight: 600; color: #17375d; margin-bottom: 5px; }
 .form-group input { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
 
-/* ====== PENGATURAN CETAK CREDIT CARD (85.6mm x 53.98mm) ====== */
+/* ====== PENGATURAN CETAK A4 PORTRAIT DENGAN KARTU LANDSCAPE ====== */
 #printArea { display: none; }
 
 @page {
-    size: 85.6mm 53.98mm landscape;
+    size: A4;
     margin: 0;
 }
 
 @media print {
     html, body {
-        width: 85.6mm;
-        height: 53.98mm;
+        width: 210mm;
+        min-height: 297mm;
         margin: 0 !important;
         padding: 0 !important;
         background: none !important;
-        overflow: hidden;
     }
 
     body * { visibility: hidden !important; }
@@ -124,22 +123,24 @@ iframe.preview-frame {
         position: absolute;
         left: 0;
         top: 0;
-        width: 85.6mm;
-        height: 53.98mm;
+        width: 210mm;
+        min-height: 297mm;
         margin: 0;
         padding: 0;
     }
 
     .print-sheet {
-        width: 85.6mm;
-        height: 53.98mm;
+        display: block;
+        width: 210mm;
+        min-height: 297mm;
         margin: 0;
         padding: 0;
     }
 
     .print-card {
-        width: 85.6mm;
-        height: 53.98mm;
+        width: 19.5cm;
+        height: 5,4cm;
+        box-sizing: border-box;
         page-break-after: always;
         page-break-inside: avoid;
         margin: 0;
@@ -149,8 +150,8 @@ iframe.preview-frame {
     }
 
     .print-card iframe {
-        width: 85.6mm !important;
-        height: 53.98mm !important;
+        width: 19.5cm !important;
+        height: 5.4cm !important;
         border: none !important;
         overflow: hidden !important;
         position: absolute;
@@ -299,13 +300,7 @@ function toggleFooterForm() {
 }
 
 function printKartuFrame() {
-    const frame = document.getElementById('kartuFrame');
-    if (!frame || !frame.contentWindow) {
-        return;
-    }
-
-    frame.contentWindow.focus();
-    frame.contentWindow.print();
+    window.print();
 }
 
 function updateFrameFooter() {
