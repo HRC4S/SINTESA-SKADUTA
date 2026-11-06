@@ -235,6 +235,7 @@
             font-size: 8px;
             line-height: 1.3;
             text-align: justify;
+            margin-top: 40px;
             margin-left: 4px;
         }
 
