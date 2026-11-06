@@ -5,8 +5,8 @@
     <title>Kartu Pelajar</title>
     <style>
         @page {
-            size: A4;
-            margin: 10mm;
+            size: A4 portrait;
+            margin: 0;
         }
 
         body {
@@ -278,7 +278,7 @@
         }
 
         .card-modern .header strong { font-size: 11px; }
-        .card-modern .logo-left, .card-modern .logo-right { top: 5px; width: 25px; height: 25px; }
+        .card-modern .logo-left, .card-modern .logo-right { top: 5px; width: 35px; height: 35px; }
         .card-modern .modern-card-title { font-size: 10px; font-weight: 700; line-height: 1.1; }
         .card-modern .title, .card-modern .aksara-jawa { display: none; }
         .card-modern .school-address {
@@ -381,8 +381,13 @@
 
         @media print {
             body {
-                display: block;
-                text-align: center;
+                display: block !important;
+                width: 85.6mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                justify-content: flex-start !important;
+                text-align: left !important;
+                transform: none !important;
             }
 
             .print-page-break {
@@ -395,7 +400,10 @@
             .card,
             .back {
                 display: block !important;
-                margin: 0 auto 10mm;
+                width: 85.6mm;
+                height: 53.98mm;
+                margin: 0 !important;
+                transform: none !important;
                 visibility: visible !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -404,7 +412,6 @@
             .back {
                 break-before: page;
                 page-break-before: always;
-                margin-top: 0;
             }
         }
     </style>

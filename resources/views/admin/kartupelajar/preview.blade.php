@@ -95,22 +95,21 @@ iframe.preview-frame {
 .form-group label { font-size: 0.9rem; font-weight: 600; color: #17375d; margin-bottom: 5px; }
 .form-group input { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
 
-/* ====== PENGATURAN CETAK CREDIT CARD (85.6mm x 53.98mm) ====== */
+/* ====== PENGATURAN CETAK A4 PORTRAIT DENGAN KARTU LANDSCAPE ====== */
 #printArea { display: none; }
 
 @page {
-    size: 85.6mm 53.98mm landscape;
+    size: A4 portrait;
     margin: 0;
 }
 
 @media print {
     html, body {
-        width: 85.6mm;
-        height: 53.98mm;
+        width: 210mm;
+        min-height: 297mm;
         margin: 0 !important;
         padding: 0 !important;
         background: none !important;
-        overflow: hidden;
     }
 
     body * { visibility: hidden !important; }
@@ -122,27 +121,31 @@ iframe.preview-frame {
     #printArea {
         display: block !important;
         position: absolute;
-        left: 0;
-        top: 0;
-        width: 85.6mm;
-        height: 53.98mm;
+        left: 0 !important;
+        top: 0 !important;
+        width: 210mm;
+        min-height: 297mm;
         margin: 0;
         padding: 0;
+        transform: none !important;
     }
 
     .print-sheet {
-        width: 85.6mm;
-        height: 53.98mm;
-        margin: 0;
+        display: block;
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 !important;
         padding: 0;
+        transform: none !important;
     }
 
     .print-card {
         width: 85.6mm;
         height: 53.98mm;
+        box-sizing: border-box;
         page-break-after: always;
         page-break-inside: avoid;
-        margin: 0;
+        margin: 0 !important;
         padding: 0;
         border: none !important;
         position: relative;
@@ -154,8 +157,10 @@ iframe.preview-frame {
         border: none !important;
         overflow: hidden !important;
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        transform: none !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
@@ -299,13 +304,7 @@ function toggleFooterForm() {
 }
 
 function printKartuFrame() {
-    const frame = document.getElementById('kartuFrame');
-    if (!frame || !frame.contentWindow) {
-        return;
-    }
-
-    frame.contentWindow.focus();
-    frame.contentWindow.print();
+    window.print();
 }
 
 function updateFrameFooter() {
