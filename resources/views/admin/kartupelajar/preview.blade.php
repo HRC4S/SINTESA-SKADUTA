@@ -304,7 +304,13 @@ function toggleFooterForm() {
 }
 
 function printKartuFrame() {
-    window.print();
+    const frame = document.getElementById('kartuFrame');
+    if (!frame || !frame.contentWindow) {
+        return;
+    }
+
+    frame.contentWindow.focus();
+    frame.contentWindow.print();
 }
 
 function updateFrameFooter() {

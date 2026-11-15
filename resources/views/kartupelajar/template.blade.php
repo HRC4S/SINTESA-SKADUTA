@@ -380,13 +380,17 @@
         }
         .card-modern .jurusan { display: none; }
 
+        .print-card-wrapper {
+            display: contents;
+        }
+
         @media print {
             body {
                 display: block !important;
-                width: 85.6mm !important;
+                width: 210mm !important;
+                min-height: 297mm !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                justify-content: flex-start !important;
                 text-align: left !important;
                 transform: none !important;
             }
@@ -398,19 +402,40 @@
                 page-break-before: always;
             }
 
-            .card,
-            .back {
+            .print-card-wrapper {
+                display: block;
+                width: 53.98mm;
+                height: 85.6mm;
+                margin: 0;
+                page-break-after: always;
+                page-break-inside: avoid;
+                position: relative;
+            }
+
+            .print-card-wrapper:last-child {
+                page-break-after: auto;
+            }
+
+            .print-page-break {
+                display: none !important;
+            }
+
+            .print-card-wrapper .card,
+            .print-card-wrapper .back {
                 display: block !important;
                 width: 85.6mm;
                 height: 53.98mm;
                 margin: 0 !important;
-                transform: none !important;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-90deg) !important;
                 visibility: visible !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
 
-            .back {
+            .print-card-wrapper .back {
                 break-before: page;
                 page-break-before: always;
             }
@@ -453,6 +478,7 @@
 
     {{-- 📄 HALAMAN DEPAN --}}
     @if ($printSide !== 'back')
+    <div class="print-card-wrapper">
     <div class="card {{ $templateStyle === 'baru' ? 'card-modern' : '' }}">
         <div class="header">
             <div class="logo-left">
@@ -536,6 +562,7 @@
         <div class="jurusan">{{ strtoupper($siswa->jurusan) }}</div>
 
     </div>
+    </div>
     @endif
 
     {{-- 📘 HALAMAN BELAKANG --}}
@@ -543,6 +570,7 @@
     @if (!$printSide)
         <div class="print-page-break"></div>
     @endif
+    <div class="print-card-wrapper">
     <div class="back {{ $templateStyle === 'baru' ? 'back-modern' : '' }}">
         <div class="back-header">KETENTUAN</div>
         <div class="rules">
@@ -553,6 +581,7 @@
             <li>Penyalahgunaan kartu akan ditindak sesuai peraturan yang berlaku.</li>
         </div>
         <div class="blue-line"></div>
+    </div>
     </div>
     @endif
 
