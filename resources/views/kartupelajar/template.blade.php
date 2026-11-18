@@ -226,13 +226,13 @@
             color: white;
             text-align: center;
             font-weight: bold;
-            font-size: 8px;
-            padding: 2px 0;
+            font-size: 12px;
+            padding: 5px 0;
         }
 
         .rules {
-            padding: 6px 12px;
-            font-size: 8px;
+            padding: 0px 12px;
+            font-size: 8.5px;
             line-height: 1.3;
             text-align: justify;
             margin-top: 40px;
@@ -519,7 +519,6 @@
                     @endif
                 </div>
                 @if ($templateStyle === 'baru')
-                    <div class="photo-school-name">SMK 2 NEGERI YOGYAKARTA</div>
                 @endif
                 <div class="barcode">
                     {{-- Pastikan width parameter (1.5 atau 2) sesuai kebutuhan scanner --}}
