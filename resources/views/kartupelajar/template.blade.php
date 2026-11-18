@@ -227,7 +227,7 @@
             text-align: center;
             font-weight: bold;
             font-size: 12px;
-            padding: 5px 0;
+            padding: 10px 0;
         }
 
         .rules {
