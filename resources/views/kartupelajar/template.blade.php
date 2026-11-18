@@ -518,8 +518,6 @@
                         <span style="font-size:7px; display:block; padding-top:1cm;">Foto Siswa</span>
                     @endif
                 </div>
-                @if ($templateStyle === 'baru')
-                @endif
                 <div class="barcode">
                     {{-- Pastikan width parameter (1.5 atau 2) sesuai kebutuhan scanner --}}
                     <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($siswa->nis, 'C39', 1, 45) }}" alt="Barcode">
